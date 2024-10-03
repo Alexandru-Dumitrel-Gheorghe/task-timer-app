@@ -1,4 +1,4 @@
-// src/components/ProductList.js
+// ProductList.js
 import React, { useState, useEffect, useCallback, useMemo } from "react";
 import axios from "axios";
 import styles from "./ProductList.module.css";
@@ -28,30 +28,47 @@ const ProductList = () => {
   const [currentWorkingProduct, setCurrentWorkingProduct] = useState(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Use environment variable for API base URL
+  const API_BASE_URL =
+    process.env.REACT_APP_API_BASE_URL || "http://localhost:5000";
 
   // Fetch categories and products
   const fetchCategories = useCallback(async () => {
     try {
-      const response = await axios.get("http://localhost:5000/products");
+      const response = await axios.get(`${API_BASE_URL}/products`);
+      console.log("API Response:", response.data);
       setCategories(response.data);
       initializeTimers(response.data);
     } catch (error) {
       console.error("Fehler beim Laden der Kategorien:", error);
       toast.error("Fehler beim Laden der Kategorien.");
+      setCategories([]);
+    } finally {
+      setIsLoading(false);
     }
-  }, []);
+  }, [API_BASE_URL]);
 
   useEffect(() => {
     fetchCategories();
   }, [fetchCategories]);
 
+  useEffect(() => {
+    console.log("Categories:", categories);
+  }, [categories]);
+
   const initializeTimers = (categoriesData) => {
     const newTimers = {};
-    categoriesData.forEach((category) => {
-      category.products.forEach((product) => {
-        newTimers[product._id] = { seconds: 0, isRunning: false };
+    if (Array.isArray(categoriesData)) {
+      categoriesData.forEach((category) => {
+        if (Array.isArray(category.products)) {
+          category.products.forEach((product) => {
+            newTimers[product._id] = { seconds: 0, isRunning: false };
+          });
+        }
       });
-    });
+    }
     setTimers(newTimers);
   };
 
@@ -60,17 +77,20 @@ const ProductList = () => {
   };
 
   // Update product status in the DB
-  const updateTimerInDB = async (category, productId, updateData) => {
-    try {
-      const url = `http://localhost:5000/products/${encodeURIComponent(
-        category
-      )}/${productId}`;
-      await axios.put(url, updateData);
-    } catch (error) {
-      console.error("Fehler beim Aktualisieren des Timers in der DB:", error);
-      throw error;
-    }
-  };
+  const updateTimerInDB = useCallback(
+    async (category, productId, updateData) => {
+      try {
+        const url = `${API_BASE_URL}/products/${encodeURIComponent(
+          category
+        )}/${productId}`;
+        await axios.put(url, updateData);
+      } catch (error) {
+        console.error("Fehler beim Aktualisieren des Timers in der DB:", error);
+        throw error;
+      }
+    },
+    [API_BASE_URL]
+  );
 
   const handleStart = async (category, productId) => {
     // Check if another timer is running
@@ -129,9 +149,9 @@ const ProductList = () => {
     // Find the product to get its details
     const product = categories
       .find((cat) => cat.category === category)
-      .products.find((prod) => prod._id === productId);
+      ?.products.find((prod) => prod._id === productId);
 
-    const productName = product.equipment;
+    const productName = product?.equipment || "";
 
     setDailyData((prev) => [
       ...prev,
@@ -141,8 +161,8 @@ const ProductList = () => {
         elapsedTime,
         productName,
         category: category,
-        articleNumber: product.articleNumber,
-        timeRequired: product.timeRequired,
+        articleNumber: product?.articleNumber || "",
+        timeRequired: product?.timeRequired || "",
       },
     ]);
 
@@ -207,7 +227,7 @@ const ProductList = () => {
     return () => {
       clearInterval(interval);
     };
-  }, [categories]);
+  }, [categories, updateTimerInDB]);
 
   const generatePDF = () => {
     const doc = new jsPDF();
@@ -232,20 +252,14 @@ const ProductList = () => {
         minute: "2-digit",
       });
 
-      const product = categories
-        .flatMap((cat) => cat.products)
-        .find((prod) => prod._id === item.productId);
-
-      if (product) {
-        tableRows.push([
-          item.category,
-          product.equipment,
-          product.articleNumber || "N/A",
-          product.timeRequired,
-          formatTime(item.elapsedTime),
-          formattedDate,
-        ]);
-      }
+      tableRows.push([
+        item.category,
+        item.productName,
+        item.articleNumber || "N/A",
+        item.timeRequired,
+        formatTime(item.elapsedTime),
+        formattedDate,
+      ]);
     });
 
     if (tableRows.length === 0) {
@@ -280,16 +294,23 @@ const ProductList = () => {
   };
 
   const filteredCategories = useMemo(() => {
+    if (!Array.isArray(categories)) return [];
     if (!searchTerm) return categories;
     return categories
       .map((category) => ({
         ...category,
-        products: category.products.filter((product) =>
-          product.equipment.toLowerCase().includes(searchTerm.toLowerCase())
-        ),
+        products: Array.isArray(category.products)
+          ? category.products.filter((product) =>
+              product.equipment.toLowerCase().includes(searchTerm.toLowerCase())
+            )
+          : [],
       }))
       .filter((category) => category.products.length > 0);
   }, [categories, searchTerm]);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className={`${styles.dashboard} ${isDarkMode ? styles.darkMode : ""}`}>
@@ -335,7 +356,6 @@ const ProductList = () => {
             <li>
               <a href="#users">Benutzer</a>
             </li>
-            {/* Weitere Navigationslinks können hier hinzugefügt werden */}
           </ul>
         </nav>
       </aside>

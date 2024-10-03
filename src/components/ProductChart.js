@@ -3,6 +3,7 @@ import React from "react";
 import { Bar } from "react-chartjs-2";
 import { Chart, registerables } from "chart.js";
 
+// Register Chart.js components
 Chart.register(...registerables);
 
 const ProductChart = ({ dailyData }) => {
