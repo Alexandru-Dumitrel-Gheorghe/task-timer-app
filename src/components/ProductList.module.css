@@ -1,0 +1,424 @@
+/* src/components/ProductList.module.css */
+
+/* Root Variables for Consistent Styling */
+:root {
+  --primary-color: #007bff;
+  --primary-hover: #0056b3;
+  --success-color: #28a745;
+  --success-hover: #218838;
+  --warning-color: #ffc107;
+  --warning-hover: #e0a800;
+  --danger-color: #dc3545;
+  --danger-hover: #c82333;
+  --background-color: #f8f9fa;
+  --container-bg: #ffffff;
+  --text-color: #212529;
+  --secondary-text: #6c757d;
+  --shadow-color: rgba(0, 0, 0, 0.15);
+  --border-color: #dee2e6;
+  --header-bg: #343a40;
+  --header-text: #ffffff;
+  --sidebar-bg: #343a40;
+  --sidebar-text: #ffffff;
+  --overlay-bg: rgba(0, 0, 0, 0.5);
+}
+
+/* General Reset */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+/* Dashboard Container */
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: var(--background-color);
+  transition: background-color 0.3s;
+}
+
+/* Header Styling */
+.header {
+  background-color: var(--header-bg);
+  padding: 15px 30px;
+  color: var(--header-text);
+  box-shadow: 0 2px 4px var(--shadow-color);
+}
+
+.headerContent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header h2 {
+  margin: 0;
+  font-size: 1.75em;
+}
+
+/* Header Actions */
+.headerActions {
+  display: flex;
+  gap: 15px;
+}
+
+.toggleThemeButton,
+.toggleSidebarButton {
+  background-color: transparent;
+  color: var(--header-text);
+  border: none;
+  font-size: 1.5em;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.toggleThemeButton:hover,
+.toggleSidebarButton:hover {
+  color: var(--primary-color);
+}
+
+/* Sidebar Styling */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: -250px;
+  width: 250px;
+  height: 100%;
+  background-color: var(--sidebar-bg);
+  color: var(--sidebar-text);
+  padding: 60px 20px;
+  transition: left 0.3s;
+  z-index: 1000;
+}
+
+.sidebarOpen {
+  left: 0;
+}
+
+.sidebarNav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebarNav li {
+  margin-bottom: 20px;
+}
+
+.sidebarNav a {
+  color: var(--sidebar-text);
+  text-decoration: none;
+  font-size: 1.1em;
+  transition: color 0.3s;
+}
+
+.sidebarNav a:hover {
+  color: var(--primary-color);
+}
+
+/* Overlay for Sidebar */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--overlay-bg);
+  z-index: 999;
+}
+
+/* Main Content Styling */
+.mainContent {
+  flex: 1;
+  padding: 30px;
+  margin-left: 0;
+  transition: margin-left 0.3s;
+}
+
+@media (min-width: 768px) {
+  .mainContent {
+    margin-left: 0;
+  }
+}
+
+/* Controls Section */
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.searchBar {
+  padding: 10px 15px;
+  border: 1px solid var(--border-color);
+  border-radius: 5px;
+  flex: 1;
+  min-width: 250px;
+  font-size: 1em;
+}
+
+.searchBar:focus {
+  border-color: var(--primary-color);
+  outline: none;
+}
+
+/* Button Group Styling */
+.buttonGroup {
+  display: flex;
+  gap: 15px;
+}
+
+.pdfButton,
+.resetButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background-color: var(--primary-color);
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  font-size: 1em;
+}
+
+.pdfButton:hover,
+.resetButton:hover {
+  background-color: var(--primary-hover);
+}
+
+.resetButton {
+  background-color: var(--warning-color);
+}
+
+.resetButton:hover {
+  background-color: var(--warning-hover);
+}
+
+/* Content Wrapper */
+.contentWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+@media (min-width: 992px) {
+  .contentWrapper {
+    flex-direction: row;
+  }
+}
+
+/* Product Section */
+.productSection {
+  flex: 2;
+  background-color: var(--container-bg);
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px var(--shadow-color);
+}
+
+/* Category List Styling */
+.categoryList {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Category Item Styling */
+.categoryItem h3 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--light-color);
+  padding: 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 0;
+  font-size: 1.2em;
+}
+
+.toggleIcon {
+  font-size: 1.5em;
+}
+
+/* Product List Styling */
+.productList {
+  list-style: none;
+  padding: 0;
+  margin-top: 10px;
+}
+
+.productItem {
+  background-color: var(--container-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 5px;
+  padding: 15px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 15px;
+}
+
+.productInfo {
+  flex: 1;
+  min-width: 200px;
+}
+
+.productInfo strong {
+  color: var(--text-color);
+  font-size: 1.1em;
+}
+
+.article {
+  color: var(--secondary-text);
+  font-size: 0.95em;
+}
+
+.productInfo div {
+  margin-top: 5px;
+  color: var(--text-color);
+  font-size: 0.95em;
+}
+
+/* Button Container Styling */
+.buttonContainer {
+  display: flex;
+  gap: 10px;
+}
+
+.startButton,
+.pauseButton,
+.stopButton {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  font-size: 0.95em;
+  color: #ffffff;
+}
+
+.startButton {
+  background-color: var(--success-color);
+}
+
+.startButton:hover {
+  background-color: var(--success-hover);
+}
+
+.pauseButton {
+  background-color: var(--warning-color);
+}
+
+.pauseButton:hover {
+  background-color: var(--warning-hover);
+}
+
+.stopButton {
+  background-color: var(--danger-color);
+}
+
+.stopButton:hover {
+  background-color: var(--danger-hover);
+}
+
+/* Current Working Info Styling */
+.currentWorkingInfo {
+  margin-top: 10px;
+  font-weight: bold;
+  color: var(--danger-color);
+  font-size: 0.95em;
+}
+
+/* No Products Message Styling */
+.noProducts {
+  text-align: center;
+  color: var(--secondary-text);
+  font-style: italic;
+  padding: 15px;
+  background-color: #e9ecef;
+  border-radius: 5px;
+}
+
+/* Chart Section */
+.chartSection {
+  flex: 1;
+  background-color: var(--container-bg);
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px var(--shadow-color);
+}
+
+/* Dark Mode Styling */
+.darkMode {
+  --background-color: #212529;
+  --container-bg: #343a40;
+  --text-color: #f8f9fa;
+  --secondary-text: #ced4da;
+  --header-bg: #343a40;
+  --header-text: #f8f9fa;
+  --sidebar-bg: #343a40;
+  --sidebar-text: #f8f9fa;
+  --overlay-bg: rgba(0, 0, 0, 0.7);
+}
+
+.darkMode .header,
+.darkMode .sidebar {
+  background-color: var(--header-bg);
+  color: var(--header-text);
+}
+
+.darkMode .sidebarNav a {
+  color: var(--sidebar-text);
+}
+
+.darkMode .mainContent {
+  background-color: var(--background-color);
+}
+
+.darkMode .productSection,
+.darkMode .chartSection {
+  background-color: var(--container-bg);
+}
+
+.darkMode .categoryItem h3 {
+  background-color: var(--container-bg);
+}
+
+.darkMode .productItem {
+  background-color: var(--container-bg);
+  border: 1px solid var(--border-color);
+}
+
+/* Responsive Design */
+@media (max-width: 991px) {
+  .contentWrapper {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 767px) {
+  .productItem {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .buttonContainer {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .buttonContainer button {
+    flex: 1;
+  }
+}
