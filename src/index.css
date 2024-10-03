@@ -1,0 +1,21 @@
+/* src/index.css */
+:root {
+  --background-color: #ffffff;
+  --text-color: #000000;
+  --header-bg: #f8f9fa;
+  --sidebar-bg: #343a40;
+}
+
+.darkMode {
+  --background-color: #2c3e50;
+  --text-color: #ecf0f1;
+  --header-bg: #1a252f;
+  --sidebar-bg: #212529;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: var(--background-color);
+  color: var(--text-color);
+}

@@ -126,7 +126,7 @@ const ProductList = () => {
 
     const currentDate = new Date();
 
-    // Find the product to get its name
+    // Find the product to get its details
     const product = categories
       .find((cat) => cat.category === category)
       .products.find((prod) => prod._id === productId);
@@ -135,7 +135,15 @@ const ProductList = () => {
 
     setDailyData((prev) => [
       ...prev,
-      { productId, date: currentDate.toISOString(), elapsedTime, productName },
+      {
+        productId,
+        date: currentDate.toISOString(),
+        elapsedTime,
+        productName,
+        category: category,
+        articleNumber: product.articleNumber,
+        timeRequired: product.timeRequired,
+      },
     ]);
 
     const updateData = { status: "Completed", elapsedTime };
@@ -206,27 +214,38 @@ const ProductList = () => {
     doc.text("Produkt Timer Bericht", 14, 16);
     const tableColumn = [
       "Kategorie",
-      "Gerät",
+      "Produkt",
       "Artikelnummer",
       "Benötigte Zeit",
-      "Vergangene Zeit",
+      "Verbrachte Zeit",
+      "Datum und Uhrzeit",
     ];
     const tableRows = [];
 
-    categories.forEach((category) => {
-      category.products.forEach((product) => {
-        if (
-          product.equipment.toLowerCase().includes(searchTerm.toLowerCase())
-        ) {
-          tableRows.push([
-            category.category,
-            product.equipment,
-            product.articleNumber || "N/A",
-            product.timeRequired,
-            formatTime(timers[product._id]?.seconds || 0),
-          ]);
-        }
+    // Include only completed products in the PDF
+    dailyData.forEach((item) => {
+      const formattedDate = new Date(item.date).toLocaleString("de-DE", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
       });
+
+      const product = categories
+        .flatMap((cat) => cat.products)
+        .find((prod) => prod._id === item.productId);
+
+      if (product) {
+        tableRows.push([
+          item.category,
+          product.equipment,
+          product.articleNumber || "N/A",
+          product.timeRequired,
+          formatTime(item.elapsedTime),
+          formattedDate,
+        ]);
+      }
     });
 
     if (tableRows.length === 0) {
