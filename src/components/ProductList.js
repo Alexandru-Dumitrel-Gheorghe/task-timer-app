@@ -1,4 +1,5 @@
-// ProductList.js
+// src/components/ProductList.js
+
 import React, { useState, useEffect, useCallback, useMemo } from "react";
 import axios from "axios";
 import styles from "./ProductList.module.css";
@@ -319,7 +320,7 @@ const ProductList = () => {
       {/* Header */}
       <header className={styles.header}>
         <div className={styles.headerContent}>
-          <h2>Produkt Timer Dashboard</h2>
+          <h2>Produkt Timer</h2>
           <div className={styles.headerActions}>
             <button
               onClick={() => setIsDarkMode(!isDarkMode)}
