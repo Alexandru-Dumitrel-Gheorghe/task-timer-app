@@ -1,0 +1,54 @@
+@import "../../styles/variables.css";
+
+.productSection {
+  flex: 2;
+  background-color: var(--container-bg);
+  padding: 30px; /* Increased padding for better spacing */
+  border-radius: var(--border-radius);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15); /* Softer shadow */
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  overflow: hidden; /* Asigură că nu există overflow */
+}
+
+.sectionTitle {
+  font-size: 2em; /* Increased font size */
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: var(--primary-color);
+  text-align: center;
+}
+
+.categoryList {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  width: 100%;
+  max-width: 1200px; /* Limităm lățimea maximă pentru un aspect mai plăcut */
+  padding: 10px; /* Add padding to create space around items */
+  border-radius: var(--border-radius);
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 768px) {
+  .productSection {
+    padding: 1px;
+  }
+
+  .categoryList {
+    gap: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .productSection {
+    padding: 1px;
+  }
+
+  .categoryList {
+    gap: 5px;
+  }
+}

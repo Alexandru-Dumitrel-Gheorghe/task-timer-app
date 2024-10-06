@@ -1,0 +1,150 @@
+@import "../../styles/variables.css";
+
+.productCard {
+  background-color: var(--white);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  padding: 20px;
+  box-shadow: 0 2px 8px var(--shadow-color);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.productCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px var(--shadow-color);
+}
+
+.productHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.productTitle {
+  margin: 0;
+  font-size: var(--font-size-large);
+  color: var(--text-color);
+}
+
+.articleNumber {
+  font-size: var(--font-size-small);
+  color: var(--secondary-text);
+}
+
+.productBody {
+  margin-top: 15px;
+}
+
+.productDetails {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.detailItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-color);
+}
+
+.icon {
+  font-size: 1.2em;
+  color: var(--primary-color);
+}
+
+.currentWork {
+  margin-top: 10px;
+  font-size: var(--font-size-medium);
+  color: var(--success-color);
+}
+
+.progressBar {
+  position: relative;
+  height: 10px;
+  background-color: var(--light-gray);
+  border-radius: 5px;
+  overflow: hidden;
+  margin-top: 20px;
+}
+
+.progress {
+  height: 100%;
+  background-color: var(--primary-color);
+  transition: width 0.5s ease;
+}
+
+.productFooter {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.startButton,
+.pauseButton,
+.stopButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-size: var(--font-size-medium);
+  color: #fff;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.startButton {
+  background-color: var(--success-color);
+}
+
+.startButton:hover {
+  background-color: var(--success-hover);
+  transform: translateY(-2px);
+}
+
+.pauseButton {
+  background-color: var(--warning-color);
+}
+
+.pauseButton:hover {
+  background-color: var(--warning-hover);
+  transform: translateY(-2px);
+}
+
+.stopButton {
+  background-color: var(--danger-color);
+}
+
+.stopButton:hover {
+  background-color: var(--danger-hover);
+  transform: translateY(-2px);
+}
+
+.startButton:disabled,
+.pauseButton:disabled,
+.stopButton:disabled {
+  background-color: var(--disabled-color);
+  cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  .productDetails {
+    flex-direction: column;
+  }
+
+  .productFooter {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .startButton,
+  .pauseButton,
+  .stopButton {
+    width: 100%;
+    justify-content: center;
+  }
+}

@@ -1,0 +1,95 @@
+@import "../../styles/variables.css";
+
+.timerContainer {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: 140px;
+  background-color: var(--white);
+  border-radius: var(--border-radius);
+  box-shadow: 0 4px 12px var(--shadow-color);
+  z-index: 1100;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+}
+
+.timerContainer:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 8px 20px var(--shadow-color);
+}
+
+.timerCircle {
+  width: 80%;
+  padding: 20px;
+  background-color: var(--primary-color);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease;
+}
+
+.timerCircle:hover {
+  background-color: var(--primary-color-hover);
+}
+
+.timerContent {
+  padding: 20px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.95);
+  border-top: 1px solid var(--primary-color);
+  box-shadow: inset 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 100%;
+}
+
+.timerProductName {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 8px;
+  font-size: 1.1rem;
+  color: var(--text-color);
+}
+
+.timerArticleNumber,
+.timerTimeRequired,
+.timerNotes {
+  display: block;
+  font-size: 0.95em;
+  color: var(--secondary-text);
+  margin-top: 5px;
+}
+
+/* Responsivitate */
+@media (max-width: 767px) {
+  .timerContainer {
+    width: 180px;
+    bottom: 20px;
+    right: 20px;
+  }
+
+  .timerProductName {
+    font-size: 1em;
+  }
+
+  .timerArticleNumber,
+  .timerTimeRequired,
+  .timerNotes {
+    font-size: 0.85em;
+  }
+}
+
+@media (min-width: 768px) {
+  .timerContainer {
+    width: 240px;
+    bottom: 30px;
+    right: 30px;
+  }
+}

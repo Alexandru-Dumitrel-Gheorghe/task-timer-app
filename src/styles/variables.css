@@ -1,0 +1,30 @@
+:root {
+  /* Color Palette */
+  --primary-color: #007bff; /* Bright blue for a fresh look */
+  --primary-hover: #0056b3; /* Darker shade for hover effect */
+  --accent-color: #ff5a00; /* Bright orange for accent elements */
+  --success-color: #28a745; /* Green for success messages */
+  --success-hover: #218838; /* Darker green on hover */
+  --warning-color: #ffc107; /* Yellow for warnings */
+  --warning-hover: #e0a800; /* Darker yellow on hover */
+  --danger-color: #dc3545; /* Red for error messages */
+  --danger-hover: #c82333; /* Darker red on hover */
+
+  --background-color: #f4f4f9; /* Soft light background */
+  --container-bg: #ffffff; /* White for container backgrounds */
+  --text-color: #343a40; /* Dark grey for primary text */
+  --secondary-text: #6c757d; /* Light grey for secondary text */
+  --shadow-color: rgba(0, 0, 0, 0.15); /* Softer shadow for depth */
+  --border-color: #ced4da; /* Light grey for borders */
+
+  /* Typography */
+  --font-family: "Poppins", sans-serif; /* Modern font for a clean look */
+  --font-size-base: 16px; /* Base font size */
+  --font-size-large: 1.6rem; /* Larger size for headings */
+  --font-size-medium: 1.125rem; /* Medium size for body text */
+  --font-size-small: 0.875rem; /* Smaller size for captions */
+
+  /* Spacing & Sizing */
+  --border-radius: 12px; /* Slightly larger rounding for a softer appearance */
+  --transition-speed: 0.4s; /* Slightly slower transition for smoother effects */
+}

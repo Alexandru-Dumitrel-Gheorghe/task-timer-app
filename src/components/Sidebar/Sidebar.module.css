@@ -1,0 +1,92 @@
+@import "../../styles/variables.css";
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: -100%;
+  width: 280px;
+  height: 100%;
+  background-color: var(--container-bg);
+  color: var(--text-color);
+  padding: 60px 20px;
+  transition: left var(--transition-speed) ease-in-out;
+  z-index: 1001; /* mai mare decât overlay-ul */
+  overflow-y: auto;
+  box-shadow: 2px 0 15px rgba(0, 0, 0, 0.2); /* Umbra mai accentuată pentru vizibilitate */
+}
+
+.sidebarOpen {
+  left: 0;
+}
+
+.sidebarNav ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebarNav li {
+  margin-bottom: 15px;
+}
+
+.sidebarNav a {
+  color: var(--text-color);
+  text-decoration: none;
+  font-size: 1.2em;
+  transition: color var(--transition-speed), transform var(--transition-speed);
+}
+
+.sidebarNav a:hover {
+  color: var(--primary-color);
+  transform: translateX(10px); /* Efect de mișcare la hover */
+}
+
+.sidebarTitle {
+  font-size: var(--font-size-large);
+  margin-bottom: 20px;
+  color: var(--primary-color); /* Schimbare culoare pentru contrast */
+  border-bottom: 2px solid var(--primary-color); /* Linie sub titlu pentru un aspect profesional */
+  padding-bottom: 10px;
+}
+
+/* Profile list styling */
+h3 {
+  font-size: var(--font-size-medium);
+  margin: 20px 0 10px;
+  color: var(--text-color);
+}
+
+button {
+  background: none;
+  border: none;
+  color: var(--text-color);
+  font-size: 1em;
+  cursor: pointer;
+  transition: color var(--transition-speed);
+}
+
+button:hover {
+  color: var(--primary-color);
+}
+
+/* Profile details styling */
+.profileDetails {
+  padding-left: 20px; /* Indent profile details */
+  margin-top: 5px; /* Space above */
+  color: var(--secondary-text); /* Change color to distinguish */
+  font-size: 0.9em; /* Smaller font for details */
+}
+
+/* Responsivitate */
+@media (max-width: 768px) {
+  .sidebar {
+    padding: 40px 15px;
+  }
+
+  .sidebarTitle {
+    font-size: var(--font-size-medium);
+  }
+
+  button {
+    font-size: 0.9em; /* Adjust button size for smaller screens */
+  }
+}

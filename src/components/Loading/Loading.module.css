@@ -1,0 +1,11 @@
+/* src/components/Loading/Loading.module.css */
+@import "../../styles/variables.css";
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-size: var(--font-size-large);
+  color: var(--primary-color);
+}

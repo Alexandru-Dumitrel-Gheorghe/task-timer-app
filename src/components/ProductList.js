@@ -1,24 +1,19 @@
-// src/components/ProductList.js
-
 import React, { useState, useEffect, useCallback, useMemo } from "react";
 import axios from "axios";
 import styles from "./ProductList.module.css";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
-import ProductChart from "./ProductChart";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import {
-  FaFilePdf,
-  FaSync,
-  FaPlay,
-  FaPause,
-  FaStop,
-  FaBars,
-  FaTimes,
-  FaMoon,
-  FaSun,
-} from "react-icons/fa";
+
+// Import components correctly according to your project structure
+import Header from "./Header/Header";
+import Sidebar from "./Sidebar/Sidebar";
+import TimerCircle from "./TimerCircle/TimerCircle";
+import Controls from "./Controls/Controls";
+import CategoryList from "./CategoryList/CategoryList";
+import ChartSection from "./ChartSection/ChartSection";
+import Loading from "./Loading/Loading";
 
 const ProductList = () => {
   const [categories, setCategories] = useState([]);
@@ -30,12 +25,11 @@ const ProductList = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [notifications, setNotifications] = useState([]); // State for notifications
 
-  // Use environment variable for API base URL
   const API_BASE_URL =
     process.env.REACT_APP_API_BASE_URL || "http://localhost:5000";
 
-  // Fetch categories and products
   const fetchCategories = useCallback(async () => {
     try {
       const response = await axios.get(`${API_BASE_URL}/products`);
@@ -52,12 +46,19 @@ const ProductList = () => {
   }, [API_BASE_URL]);
 
   useEffect(() => {
+    const savedTimers = localStorage.getItem("timers");
+    const savedDailyData = localStorage.getItem("dailyData");
+
+    if (savedTimers) {
+      setTimers(JSON.parse(savedTimers));
+    }
+
+    if (savedDailyData) {
+      setDailyData(JSON.parse(savedDailyData));
+    }
+
     fetchCategories();
   }, [fetchCategories]);
-
-  useEffect(() => {
-    console.log("Categories:", categories);
-  }, [categories]);
 
   const initializeTimers = (categoriesData) => {
     const newTimers = {};
@@ -77,7 +78,6 @@ const ProductList = () => {
     setExpandedCategory(expandedCategory === category ? null : category);
   };
 
-  // Update product status in the DB
   const updateTimerInDB = useCallback(
     async (category, productId, updateData) => {
       try {
@@ -94,7 +94,6 @@ const ProductList = () => {
   );
 
   const handleStart = async (category, productId) => {
-    // Check if another timer is running
     const runningProduct = Object.keys(timers).find(
       (id) => timers[id].isRunning
     );
@@ -106,10 +105,14 @@ const ProductList = () => {
     }
 
     setCurrentWorkingProduct(productId);
-    setTimers((prev) => ({
-      ...prev,
-      [productId]: { ...prev[productId], isRunning: true },
-    }));
+    setTimers((prev) => {
+      const updatedTimers = {
+        ...prev,
+        [productId]: { ...prev[productId], isRunning: true },
+      };
+      localStorage.setItem("timers", JSON.stringify(updatedTimers));
+      return updatedTimers;
+    });
 
     const updateData = { status: "In Progress", elapsedTime: 0 };
     try {
@@ -121,10 +124,14 @@ const ProductList = () => {
   };
 
   const handlePause = async (category, productId) => {
-    setTimers((prev) => ({
-      ...prev,
-      [productId]: { ...prev[productId], isRunning: false },
-    }));
+    setTimers((prev) => {
+      const updatedTimers = {
+        ...prev,
+        [productId]: { ...prev[productId], isRunning: false },
+      };
+      localStorage.setItem("timers", JSON.stringify(updatedTimers));
+      return updatedTimers;
+    });
 
     const updateData = {
       status: "Paused",
@@ -140,38 +147,51 @@ const ProductList = () => {
 
   const handleStop = async (category, productId) => {
     const elapsedTime = timers[productId].seconds;
-    setTimers((prev) => ({
-      ...prev,
-      [productId]: { seconds: 0, isRunning: false },
-    }));
+    setTimers((prev) => {
+      const updatedTimers = {
+        ...prev,
+        [productId]: { seconds: 0, isRunning: false },
+      };
+      localStorage.setItem("timers", JSON.stringify(updatedTimers));
+      return updatedTimers;
+    });
 
     const currentDate = new Date();
-
-    // Find the product to get its details
     const product = categories
       .find((cat) => cat.category === category)
       ?.products.find((prod) => prod._id === productId);
 
     const productName = product?.equipment || "";
 
-    setDailyData((prev) => [
-      ...prev,
-      {
-        productId,
-        date: currentDate.toISOString(),
-        elapsedTime,
-        productName,
-        category: category,
-        articleNumber: product?.articleNumber || "",
-        timeRequired: product?.timeRequired || "",
-      },
-    ]);
+    setDailyData((prev) => {
+      const newData = [
+        ...prev,
+        {
+          productId,
+          date: currentDate.toISOString(),
+          elapsedTime,
+          productName,
+          category: category,
+          articleNumber: product?.articleNumber || "",
+          timeRequired: product?.timeRequired || "",
+          notes: product?.notes || "",
+        },
+      ];
+      localStorage.setItem("dailyData", JSON.stringify(newData));
+      return newData;
+    });
 
     const updateData = { status: "Completed", elapsedTime };
     try {
       await updateTimerInDB(category, productId, updateData);
       toast.success("Timer gestoppt und Daten gespeichert.");
       setCurrentWorkingProduct(null);
+      setNotifications((prev) => [
+        ...prev,
+        `Timer für ${productName} wurde erfolgreich gestoppt. Verbrachte Zeit: ${formatTime(
+          elapsedTime
+        )}`,
+      ]);
     } catch (error) {
       toast.error("Fehler beim Stoppen des Timers.");
     }
@@ -186,6 +206,7 @@ const ProductList = () => {
             updatedTimers[productId].seconds += 1;
           }
         });
+        localStorage.setItem("timers", JSON.stringify(updatedTimers));
         return updatedTimers;
       });
     }, 1000);
@@ -203,7 +224,6 @@ const ProductList = () => {
             Object.keys(resetTimers).forEach((productId) => {
               resetTimers[productId].seconds = 0;
               resetTimers[productId].isRunning = false;
-              // Find the category of the product
               const productCategory = categories.find((cat) =>
                 cat.products.some((prod) => prod._id === productId)
               );
@@ -217,6 +237,7 @@ const ProductList = () => {
               }
             });
             toast.info("Die Zeit wurde um Mitternacht zurückgesetzt.");
+            localStorage.setItem("timers", JSON.stringify(resetTimers));
             return resetTimers;
           });
         }, timeUntilMidnight);
@@ -240,10 +261,10 @@ const ProductList = () => {
       "Benötigte Zeit",
       "Verbrachte Zeit",
       "Datum und Uhrzeit",
+      "Notizen",
     ];
     const tableRows = [];
 
-    // Include only completed products in the PDF
     dailyData.forEach((item) => {
       const formattedDate = new Date(item.date).toLocaleString("de-DE", {
         year: "numeric",
@@ -260,6 +281,7 @@ const ProductList = () => {
         item.timeRequired,
         formatTime(item.elapsedTime),
         formattedDate,
+        item.notes || "N/A",
       ]);
     });
 
@@ -291,6 +313,7 @@ const ProductList = () => {
 
   const resetDailyData = () => {
     setDailyData([]);
+    localStorage.setItem("dailyData", JSON.stringify([])); // Reset in localStorage
     toast.info("Die täglichen Daten wurden zurückgesetzt.");
   };
 
@@ -310,7 +333,7 @@ const ProductList = () => {
   }, [categories, searchTerm]);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <Loading />;
   }
 
   return (
@@ -318,48 +341,19 @@ const ProductList = () => {
       <ToastContainer />
 
       {/* Header */}
-      <header className={styles.header}>
-        <div className={styles.headerContent}>
-          <h2>Produkt Timer</h2>
-          <div className={styles.headerActions}>
-            <button
-              onClick={() => setIsDarkMode(!isDarkMode)}
-              className={styles.toggleThemeButton}
-              title="Toggle Dark Mode"
-            >
-              {isDarkMode ? <FaSun /> : <FaMoon />}
-            </button>
-            <button
-              onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-              className={styles.toggleSidebarButton}
-              title="Toggle Sidebar"
-            >
-              {isSidebarOpen ? <FaTimes /> : <FaBars />}
-            </button>
-          </div>
-        </div>
-      </header>
+      <Header
+        isDarkMode={isDarkMode}
+        toggleDarkMode={() => setIsDarkMode(!isDarkMode)}
+        isSidebarOpen={isSidebarOpen}
+        toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
+        notifications={notifications} // Pass notifications
+      />
 
       {/* Sidebar */}
-      <aside
-        className={`${styles.sidebar} ${
-          isSidebarOpen ? styles.sidebarOpen : ""
-        }`}
-      >
-        <nav className={styles.sidebarNav}>
-          <ul>
-            <li>
-              <a href="#products">Produkte</a>
-            </li>
-            <li>
-              <a href="#settings">Einstellungen</a>
-            </li>
-            <li>
-              <a href="#users">Benutzer</a>
-            </li>
-          </ul>
-        </nav>
-      </aside>
+      <Sidebar
+        isSidebarOpen={isSidebarOpen}
+        closeSidebar={() => setIsSidebarOpen(false)}
+      />
 
       {/* Overlay for Sidebar */}
       {isSidebarOpen && (
@@ -369,121 +363,41 @@ const ProductList = () => {
         ></div>
       )}
 
+      {/* Timer Circle */}
+      <TimerCircle
+        currentWorkingProduct={currentWorkingProduct}
+        categories={categories}
+        timers={timers}
+        formatTime={formatTime}
+      />
+
       {/* Main Content */}
       <main className={styles.mainContent}>
         {/* Controls Section */}
-        <div className={styles.controls}>
-          <input
-            type="text"
-            placeholder="Suche nach Task-Namen..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className={styles.searchBar}
-          />
-          <div className={styles.buttonGroup}>
-            <button onClick={generatePDF} className={styles.pdfButton}>
-              <FaFilePdf /> PDF-Bericht
-            </button>
-            <button onClick={resetDailyData} className={styles.resetButton}>
-              <FaSync /> Daten Zurücksetzen
-            </button>
-          </div>
-        </div>
+        <Controls
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+          generatePDF={generatePDF}
+          resetDailyData={resetDailyData}
+        />
 
         {/* Content Wrapper */}
         <div className={styles.contentWrapper}>
           {/* Product List */}
-          <section className={styles.productSection}>
-            <div className={styles.categoryList}>
-              {filteredCategories.map((category) => (
-                <div key={category.category} className={styles.categoryItem}>
-                  <h3 onClick={() => handleToggleCategory(category.category)}>
-                    {category.category}
-                    <span className={styles.toggleIcon}>
-                      {expandedCategory === category.category ? "-" : "+"}
-                    </span>
-                  </h3>
-                  {expandedCategory === category.category && (
-                    <ul className={styles.productList}>
-                      {category.products.length > 0 ? (
-                        category.products.map((product) => (
-                          <li key={product._id} className={styles.productItem}>
-                            <div className={styles.productInfo}>
-                              <strong>{product.equipment}</strong>{" "}
-                              <span className={styles.article}>
-                                (Artikel: {product.articleNumber || "N/A"})
-                              </span>
-                              <div>
-                                <span>
-                                  Benötigte Zeit: {product.timeRequired}
-                                </span>
-                              </div>
-                              <div>
-                                <span>
-                                  Arbeitszeit:{" "}
-                                  {formatTime(
-                                    timers[product._id]?.seconds || 0
-                                  )}
-                                </span>
-                              </div>
-                            </div>
-                            <div className={styles.buttonContainer}>
-                              <button
-                                onClick={() =>
-                                  handleStart(category.category, product._id)
-                                }
-                                disabled={timers[product._id]?.isRunning}
-                                className={styles.startButton}
-                                title="Timer starten"
-                              >
-                                <FaPlay /> Start
-                              </button>
-                              <button
-                                onClick={() =>
-                                  handlePause(category.category, product._id)
-                                }
-                                disabled={!timers[product._id]?.isRunning}
-                                className={styles.pauseButton}
-                                title="Timer pausieren"
-                              >
-                                <FaPause /> Pause
-                              </button>
-                              <button
-                                onClick={() =>
-                                  handleStop(category.category, product._id)
-                                }
-                                disabled={timers[product._id]?.seconds === 0}
-                                className={styles.stopButton}
-                                title="Timer stoppen"
-                              >
-                                <FaStop /> Stop
-                              </button>
-                            </div>
-                            {currentWorkingProduct === product._id && (
-                              <div className={styles.currentWorkingInfo}>
-                                <strong>Aktuelle Arbeit:</strong>{" "}
-                                {formatTime(timers[product._id]?.seconds || 0)}
-                              </div>
-                            )}
-                          </li>
-                        ))
-                      ) : (
-                        <li className={styles.noProducts}>
-                          Es gibt keine Produkte, die den Suchkriterien
-                          entsprechen.
-                        </li>
-                      )}
-                    </ul>
-                  )}
-                </div>
-              ))}
-            </div>
-          </section>
+          <CategoryList
+            categories={filteredCategories}
+            expandedCategory={expandedCategory}
+            handleToggleCategory={handleToggleCategory}
+            timers={timers}
+            handleStart={handleStart}
+            handlePause={handlePause}
+            handleStop={handleStop}
+            currentWorkingProduct={currentWorkingProduct}
+            formatTime={formatTime}
+          />
 
           {/* Chart Section */}
-          <section className={styles.chartSection}>
-            <ProductChart dailyData={dailyData} />
-          </section>
+          <ChartSection dailyData={dailyData} />
         </div>
       </main>
     </div>

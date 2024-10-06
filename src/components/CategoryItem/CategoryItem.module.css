@@ -1,0 +1,82 @@
+.categoryContainer {
+  background-color: var(--white);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  margin-bottom: 30px;
+  box-shadow: 0 4px 6px var(--shadow-color);
+  overflow: hidden;
+}
+
+.categoryHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background-color: var(--light-gray);
+  cursor: pointer;
+}
+
+.categoryTitle {
+  margin: 0;
+  font-size: var(--font-size-large);
+  color: var(--primary-color);
+  display: flex;
+  align-items: center; /* Aliniază iconița cu textul */
+}
+
+.timerIndicator {
+  margin-left: 10px; /* Spațiu între titlu și iconiță */
+  color: green; /* Culoarea iconiței */
+  font-size: 1.5em; /* Mărimea iconiței */
+  animation: spin 1s linear infinite; /* Animația de rotație */
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.toggleIcon {
+  font-size: var(--font-size-large);
+  color: var(--primary-color);
+}
+
+.productContainer {
+  padding: 20px;
+  background-color: var(--white);
+}
+
+.productContainer > *:not(:last-child) {
+  margin-bottom: 15px;
+}
+
+.noProducts {
+  text-align: center;
+  color: var(--secondary-text);
+  font-style: italic;
+  padding: 20px;
+  background-color: var(--light-gray);
+  border-radius: var(--border-radius);
+}
+
+@media (min-width: 768px) {
+  .productContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
+  .productContainer > * {
+    flex: 1 1 calc(50% - 20px);
+  }
+}
+
+@media (min-width: 1024px) {
+  .productContainer > * {
+    flex: 1 1 calc(33.333% - 20px);
+  }
+}

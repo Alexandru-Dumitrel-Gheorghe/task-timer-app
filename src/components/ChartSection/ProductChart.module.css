@@ -1,0 +1,50 @@
+@import "../../styles/variables.css";
+
+.chartContainer {
+  flex: 1;
+  min-height: 400px;
+  padding: 25px;
+  background-color: var(--white);
+  border-radius: var(--border-radius);
+  box-shadow: 0 4px 12px var(--shadow-color);
+  display: flex;
+  flex-direction: column;
+  max-height: 600px;
+}
+
+.chartTitle {
+  text-align: center;
+  color: var(--text-color);
+  margin-bottom: 20px;
+  font-size: 1.8em;
+  font-weight: bold;
+}
+
+.chartWrapper {
+  flex: 1;
+  position: relative;
+  height: 100%;
+}
+
+.chartWrapper canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+@media (max-width: 1200px) {
+  .chartTitle {
+    font-size: 1.5em;
+  }
+}
+
+@media (max-width: 768px) {
+  .chartTitle {
+    font-size: 1.3em;
+  }
+}
+
+@media (max-width: 576px) {
+  .chartTitle {
+    font-size: 1.1em;
+  }
+}
