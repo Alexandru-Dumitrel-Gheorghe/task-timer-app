@@ -1,13 +1,24 @@
 import React from "react";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+} from "react-router-dom";
+import Login from "./components/Auth/Login";
+import Register from "./components/Auth/Register";
 import ProductList from "./components/ProductList";
-import "./App.css";
-import "./styles/global.css"; // Import the global CSS file
 
 function App() {
   return (
-    <div className="App">
-      <ProductList />
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Navigate to="/login" />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/products" element={<ProductList />} />
+      </Routes>
+    </Router>
   );
 }
 

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback, useMemo } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import styles from "./ProductList.module.css";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
@@ -25,14 +26,25 @@ const ProductList = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [notifications, setNotifications] = useState([]); // State for notifications
+  const [notifications, setNotifications] = useState([]);
 
   const API_BASE_URL =
     process.env.REACT_APP_API_BASE_URL || "http://localhost:5000";
 
+  const navigate = useNavigate();
+
   const fetchCategories = useCallback(async () => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/products`);
+      const token = localStorage.getItem("token");
+      if (!token) {
+        navigate("/login");
+        return;
+      }
+      const response = await axios.get(`${API_BASE_URL}/products`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       console.log("API Response:", response.data);
       setCategories(response.data);
       initializeTimers(response.data);
@@ -43,22 +55,27 @@ const ProductList = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [API_BASE_URL]);
+  }, [API_BASE_URL, navigate]);
 
   useEffect(() => {
-    const savedTimers = localStorage.getItem("timers");
-    const savedDailyData = localStorage.getItem("dailyData");
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/login");
+    } else {
+      const savedTimers = localStorage.getItem("timers");
+      const savedDailyData = localStorage.getItem("dailyData");
 
-    if (savedTimers) {
-      setTimers(JSON.parse(savedTimers));
+      if (savedTimers) {
+        setTimers(JSON.parse(savedTimers));
+      }
+
+      if (savedDailyData) {
+        setDailyData(JSON.parse(savedDailyData));
+      }
+
+      fetchCategories();
     }
-
-    if (savedDailyData) {
-      setDailyData(JSON.parse(savedDailyData));
-    }
-
-    fetchCategories();
-  }, [fetchCategories]);
+  }, [fetchCategories, navigate]);
 
   const initializeTimers = (categoriesData) => {
     const newTimers = {};
@@ -81,10 +98,15 @@ const ProductList = () => {
   const updateTimerInDB = useCallback(
     async (category, productId, updateData) => {
       try {
+        const token = localStorage.getItem("token");
         const url = `${API_BASE_URL}/products/${encodeURIComponent(
           category
         )}/${productId}`;
-        await axios.put(url, updateData);
+        await axios.put(url, updateData, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
       } catch (error) {
         console.error("Fehler beim Aktualisieren des Timers in der DB:", error);
         throw error;
@@ -114,7 +136,7 @@ const ProductList = () => {
       return updatedTimers;
     });
 
-    const updateData = { status: "In Progress", elapsedTime: 0 };
+    const updateData = { status: "In Bearbeitung", elapsedTime: 0 };
     try {
       await updateTimerInDB(category, productId, updateData);
       toast.success("Timer gestartet!");
@@ -134,7 +156,7 @@ const ProductList = () => {
     });
 
     const updateData = {
-      status: "Paused",
+      status: "Pausiert",
       elapsedTime: timers[productId].seconds,
     };
     try {
@@ -181,7 +203,7 @@ const ProductList = () => {
       return newData;
     });
 
-    const updateData = { status: "Completed", elapsedTime };
+    const updateData = { status: "Abgeschlossen", elapsedTime };
     try {
       await updateTimerInDB(category, productId, updateData);
       toast.success("Timer gestoppt und Daten gespeichert.");
@@ -229,7 +251,7 @@ const ProductList = () => {
               );
               if (productCategory) {
                 updateTimerInDB(productCategory.category, productId, {
-                  status: "Not Started",
+                  status: "Nicht gestartet",
                   elapsedTime: 0,
                 }).catch((error) => {
                   console.error("Fehler beim Zurücksetzen des Timers:", error);
@@ -253,7 +275,7 @@ const ProductList = () => {
 
   const generatePDF = () => {
     const doc = new jsPDF();
-    doc.text("Produkt Timer Bericht", 14, 16);
+    doc.text("Produkt-Timer-Bericht", 14, 16);
     const tableColumn = [
       "Kategorie",
       "Produkt",
@@ -313,7 +335,7 @@ const ProductList = () => {
 
   const resetDailyData = () => {
     setDailyData([]);
-    localStorage.setItem("dailyData", JSON.stringify([])); // Reset in localStorage
+    localStorage.setItem("dailyData", JSON.stringify([]));
     toast.info("Die täglichen Daten wurden zurückgesetzt.");
   };
 
@@ -346,7 +368,7 @@ const ProductList = () => {
         toggleDarkMode={() => setIsDarkMode(!isDarkMode)}
         isSidebarOpen={isSidebarOpen}
         toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
-        notifications={notifications} // Pass notifications
+        notifications={notifications}
       />
 
       {/* Sidebar */}
