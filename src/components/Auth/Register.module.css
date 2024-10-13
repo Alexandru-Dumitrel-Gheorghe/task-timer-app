@@ -8,6 +8,7 @@
   background: linear-gradient(135deg, #007acc, #00c6ff);
   padding: 20px;
   position: relative;
+  overflow-x: hidden;
 }
 
 .registerBox {
