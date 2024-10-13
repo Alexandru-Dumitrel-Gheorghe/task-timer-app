@@ -1,4 +1,4 @@
-// Header.js
+// src/components/Header/Header.js
 import React, { useState } from "react";
 import styles from "./Header.module.css";
 import {
@@ -8,97 +8,101 @@ import {
   FaTimes,
   FaBell,
   FaSignOutAlt,
-} from "react-icons/fa"; // Importiere das Logout-Icon
-import { useNavigate } from "react-router-dom"; // Importiere useNavigate für die Navigation
-import { toast } from "react-toastify"; // Importiere toast für Benachrichtigungen
+} from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+import { useSnackbar } from "notistack"; // Importăm hook-ul pentru notificări
 
 const Header = ({
   isDarkMode,
   toggleDarkMode,
   isSidebarOpen,
   toggleSidebar,
-  notifications, // Benachrichtigungen als Prop
+  notifications,
 }) => {
   const [showNotifications, setShowNotifications] = useState(false);
-  const navigate = useNavigate(); // Initialisiere navigate
+  const navigate = useNavigate();
+  const { enqueueSnackbar } = useSnackbar(); // Folosim hook-ul pentru notificări
 
   const toggleNotifications = () => {
     setShowNotifications(!showNotifications);
   };
 
   const handleLogout = () => {
-    // Entferne Token und andere Daten aus localStorage
+    // Eliminăm token-ul de autentificare din localStorage
     localStorage.removeItem("token");
-    localStorage.removeItem("timers");
-    localStorage.removeItem("dailyData");
-    // Zeige eine Erfolgsmeldung an
-    toast.success("Du wurdest erfolgreich abgemeldet.");
-    // Navigiere zur Login-Seite
+    // Afișăm notificarea de succes la deconectare
+    enqueueSnackbar("Du wurdest erfolgreich abgemeldet.", {
+      variant: "success",
+    });
+    // Navigăm către pagina de login
     navigate("/login");
   };
 
   return (
     <header className={styles.header}>
       <div className={styles.headerContent}>
-        <h2>Produkt Timer</h2>
+        <div className={styles.logo}>
+          <h2>Produkt Timer</h2>
+        </div>
         <div className={styles.headerActions}>
           <button
             onClick={toggleDarkMode}
-            className={styles.toggleThemeButton}
-            title="Dark Mode umschalten"
-            aria-label="Dark Mode umschalten"
+            className={styles.iconButton}
+            title="Wechseln Sie den Dunkelmodus"
+            aria-label="Wechseln Sie den Dunkelmodus"
           >
             {isDarkMode ? <FaSun /> : <FaMoon />}
           </button>
           <button
             onClick={toggleSidebar}
-            className={styles.toggleSidebarButton}
+            className={styles.iconButton}
             title="Seitenleiste umschalten"
             aria-label="Seitenleiste umschalten"
           >
             {isSidebarOpen ? <FaTimes /> : <FaBars />}
           </button>
-          <button
-            onClick={toggleNotifications}
-            className={styles.toggleNotificationsButton}
-            title="Benachrichtigungen"
-            aria-label="Benachrichtigungen"
-          >
-            <FaBell />
-            {notifications.length > 0 && (
-              <span className={styles.notificationBadge}>
-                {notifications.length}
-              </span>
+          <div className={styles.notificationWrapper}>
+            <button
+              onClick={toggleNotifications}
+              className={styles.iconButton}
+              title="Benachrichtigungen"
+              aria-label="Benachrichtigungen"
+            >
+              <FaBell />
+              {notifications.length > 0 && (
+                <span className={styles.notificationBadge}>
+                  {notifications.length}
+                </span>
+              )}
+            </button>
+            {showNotifications && (
+              <div className={styles.notificationDropdown}>
+                <h4>Benachrichtigungen</h4>
+                {notifications.length > 0 ? (
+                  notifications.map((notification, index) => (
+                    <div key={index} className={styles.notificationItem}>
+                      {notification}
+                    </div>
+                  ))
+                ) : (
+                  <div className={styles.notificationItem}>
+                    Es gibt keine Benachrichtigungen.
+                  </div>
+                )}
+              </div>
             )}
-          </button>
-          {/* Hinzufügen des Logout-Buttons */}
+          </div>
           <button
             onClick={handleLogout}
             className={styles.logoutButton}
             title="Abmelden"
             aria-label="Abmelden"
           >
-            <FaSignOutAlt /> {/* Icon für Logout */}
+            <FaSignOutAlt />
             <span className={styles.logoutText}>Abmelden</span>
           </button>
         </div>
       </div>
-      {showNotifications && (
-        <div className={styles.notificationDropdown}>
-          <h4>Benachrichtigungen</h4>
-          {notifications.length > 0 ? (
-            notifications.map((notification, index) => (
-              <div key={index} className={styles.notificationItem}>
-                {notification}
-              </div>
-            ))
-          ) : (
-            <div className={styles.notificationItem}>
-              Es gibt keine Benachrichtigungen.
-            </div>
-          )}
-        </div>
-      )}
     </header>
   );
 };

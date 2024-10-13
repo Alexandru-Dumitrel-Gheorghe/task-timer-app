@@ -1,3 +1,4 @@
+// src/components/ProductItem/ProductItem.js
 import React from "react";
 import styles from "./ProductItem.module.css";
 import { FaPlay, FaPause, FaStop } from "react-icons/fa";
@@ -14,8 +15,8 @@ const ProductItem = ({
   formatTime,
   isActive,
 }) => {
-  // Calculăm procentajul de progres (presupunând că `timeRequired` este în secunde)
-  const totalRequiredTime = product.timeRequiredInSeconds || 1; // Evităm divizarea la zero
+  // Berechne den Fortschrittsprozentsatz (angenommen, `timeRequired` ist in Sekunden)
+  const totalRequiredTime = product.timeRequiredInSeconds || 1; // Vermeide Division durch Null
   const elapsedTime = timer?.seconds || 0;
   const progressPercentage = Math.min(
     (elapsedTime / totalRequiredTime) * 100,
@@ -58,7 +59,7 @@ const ProductItem = ({
       <div className={styles.productFooter}>
         <button
           onClick={() => handleStart(category, product._id)}
-          disabled={timer?.isRunning}
+          disabled={timer?.isRunning} // Deaktiviere Start, wenn bereits läuft
           className={styles.startButton}
           title="Timer starten"
         >
@@ -66,7 +67,7 @@ const ProductItem = ({
         </button>
         <button
           onClick={() => handlePause(category, product._id)}
-          disabled={!timer?.isRunning}
+          disabled={!timer?.isRunning} // Deaktiviere Pause, wenn nicht läuft
           className={styles.pauseButton}
           title="Timer pausieren"
         >
@@ -74,11 +75,11 @@ const ProductItem = ({
         </button>
         <button
           onClick={() => handleStop(category, product._id)}
-          disabled={elapsedTime === 0}
+          disabled={elapsedTime === 0} // Deaktiviere Stopp, wenn keine Zeit vergangen ist
           className={styles.stopButton}
           title="Timer stoppen"
         >
-          <FaStop /> Stop
+          <FaStop /> Stopp
         </button>
       </div>
     </div>

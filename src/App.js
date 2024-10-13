@@ -1,23 +1,42 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   BrowserRouter as Router,
   Route,
   Routes,
   Navigate,
 } from "react-router-dom";
+import "./App.css";
 import Login from "./components/Auth/Login";
 import Register from "./components/Auth/Register";
 import ProductList from "./components/ProductList";
+import { AuthProvider, AuthContext } from "./context/AuthContext";
+import { SnackbarProvider } from "notistack"; // Importăm SnackbarProvider
+
+const PrivateRoute = ({ children }) => {
+  const { isAuthenticated } = useContext(AuthContext);
+  return isAuthenticated ? children : <Navigate to="/login" />;
+};
 
 function App() {
   return (
     <Router>
-      <Routes>
-        <Route path="/" element={<Navigate to="/login" />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/products" element={<ProductList />} />
-      </Routes>
+      <AuthProvider>
+        <SnackbarProvider maxSnack={3} autoHideDuration={3000}>
+          <Routes>
+            <Route path="/" element={<Navigate to="/login" />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route
+              path="/products"
+              element={
+                <PrivateRoute>
+                  <ProductList />
+                </PrivateRoute>
+              }
+            />
+          </Routes>
+        </SnackbarProvider>
+      </AuthProvider>
     </Router>
   );
 }

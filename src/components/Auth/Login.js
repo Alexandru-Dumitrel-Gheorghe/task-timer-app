@@ -1,29 +1,42 @@
-import React, { useState } from "react";
-import axios from "axios";
+import React, { useState, useContext } from "react";
+import axiosInstance from "../../axiosConfig";
 import { useNavigate, Link } from "react-router-dom";
 import styles from "./Login.module.css";
+import { AuthContext } from "../../context/AuthContext"; // Import AuthContext
+import { useSnackbar } from "notistack"; // Importăm useSnackbar din notistack
 
 const Login = () => {
+  const { login } = useContext(AuthContext);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-
-  const API_BASE_URL =
-    process.env.REACT_APP_API_BASE_URL || "http://localhost:5000";
+  const { enqueueSnackbar } = useSnackbar(); // Folosim hook-ul pentru notificări
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
-      const response = await axios.post(`${API_BASE_URL}/login`, {
+      const response = await axiosInstance.post("/login", {
         username,
         password,
       });
-      localStorage.setItem("token", response.data.token);
-      alert("Erfolgreich angemeldet!");
-      navigate("/products");
+
+      const { token, user } = response.data;
+
+      if (token && user) {
+        await login(token);
+        localStorage.setItem("user", JSON.stringify(user));
+        enqueueSnackbar("Erfolgreich angemeldet!", { variant: "success" }); // Notificare de succes
+        navigate("/products");
+      } else {
+        throw new Error("Ungültige Anmeldedaten");
+      }
     } catch (error) {
       console.error("Anmeldung fehlgeschlagen", error);
-      alert("Anmeldung fehlgeschlagen");
+      enqueueSnackbar("Anmeldung fehlgeschlagen", { variant: "error" }); // Notificare de eroare
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -38,6 +51,7 @@ const Login = () => {
             onChange={(e) => setUsername(e.target.value)}
             placeholder="Benutzername"
             required
+            disabled={loading}
           />
           <input
             type="password"
@@ -45,8 +59,11 @@ const Login = () => {
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Passwort"
             required
+            disabled={loading}
           />
-          <button type="submit">Anmelden</button>
+          <button type="submit" disabled={loading}>
+            {loading ? "Lädt..." : "Anmelden"}
+          </button>
         </form>
         <p>
           Noch kein Konto? <Link to="/register">Hier registrieren</Link>.

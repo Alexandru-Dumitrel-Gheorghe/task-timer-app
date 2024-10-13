@@ -4,15 +4,18 @@
   position: fixed;
   top: 0;
   left: -100%;
-  width: 280px;
+  width: 300px;
+  max-width: 80vw;
   height: 100%;
   background-color: var(--container-bg);
   color: var(--text-color);
-  padding: 60px 20px;
-  transition: left var(--transition-speed) ease-in-out;
-  z-index: 1001; /* mai mare decât overlay-ul */
+  padding: 60px 25px;
+  transition: left var(--transition-speed) ease-in-out,
+    box-shadow var(--transition-speed);
+  z-index: 1001;
   overflow-y: auto;
-  box-shadow: 2px 0 15px rgba(0, 0, 0, 0.2); /* Umbra mai accentuată pentru vizibilitate */
+  box-shadow: 2px 0 20px rgba(0, 0, 0, 0.3);
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .sidebarOpen {
@@ -22,10 +25,11 @@
 .sidebarNav ul {
   list-style: none;
   padding: 0;
+  margin-top: 30px;
 }
 
 .sidebarNav li {
-  margin-bottom: 15px;
+  margin-bottom: 20px;
 }
 
 .sidebarNav a {
@@ -33,60 +37,125 @@
   text-decoration: none;
   font-size: 1.2em;
   transition: color var(--transition-speed), transform var(--transition-speed);
+  position: relative;
+}
+
+.sidebarNav a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -5px;
+  width: 0;
+  height: 2px;
+  background-color: var(--primary-color);
+  transition: width var(--transition-speed);
 }
 
 .sidebarNav a:hover {
   color: var(--primary-color);
-  transform: translateX(10px); /* Efect de mișcare la hover */
+  transform: translateX(10px);
+}
+
+.sidebarNav a:hover::after {
+  width: 100%;
 }
 
 .sidebarTitle {
   font-size: var(--font-size-large);
-  margin-bottom: 20px;
-  color: var(--primary-color); /* Schimbare culoare pentru contrast */
-  border-bottom: 2px solid var(--primary-color); /* Linie sub titlu pentru un aspect profesional */
-  padding-bottom: 10px;
+  margin-bottom: 25px;
+  color: var(--primary-color);
+  border-bottom: 3px solid var(--primary-color);
+  padding-bottom: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
-/* Profile list styling */
 h3 {
   font-size: var(--font-size-medium);
-  margin: 20px 0 10px;
+  margin: 25px 0 12px;
   color: var(--text-color);
 }
 
 button {
   background: none;
-  border: none;
+  border: 1px solid transparent;
   color: var(--text-color);
   font-size: 1em;
   cursor: pointer;
-  transition: color var(--transition-speed);
+  transition: color var(--transition-speed), border var(--transition-speed);
+  padding: 5px 10px;
 }
 
 button:hover {
   color: var(--primary-color);
+  border-color: var(--primary-color);
 }
 
-/* Profile details styling */
 .profileDetails {
-  padding-left: 20px; /* Indent profile details */
-  margin-top: 5px; /* Space above */
-  color: var(--secondary-text); /* Change color to distinguish */
-  font-size: 0.9em; /* Smaller font for details */
+  padding-left: 25px;
+  margin-top: 8px;
+  color: var(--secondary-text);
+  font-size: 0.95em;
+  line-height: 1.4;
 }
 
-/* Responsivitate */
-@media (max-width: 768px) {
+/* Responsiveness */
+@media (max-width: 1024px) {
   .sidebar {
-    padding: 40px 15px;
+    width: 250px;
+    padding: 50px 20px;
   }
 
   .sidebarTitle {
     font-size: var(--font-size-medium);
   }
 
+  .sidebarNav a {
+    font-size: 1.1em;
+  }
+
   button {
-    font-size: 0.9em; /* Adjust button size for smaller screens */
+    font-size: 0.9em;
+    padding: 4px 8px;
+  }
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    width: 220px;
+    padding: 40px 15px;
+  }
+
+  .sidebarTitle {
+    font-size: var(--font-size-small);
+  }
+
+  .sidebarNav a {
+    font-size: 1em;
+  }
+
+  button {
+    font-size: 0.85em;
+    padding: 4px 6px;
+  }
+}
+
+@media (max-width: 480px) {
+  .sidebar {
+    width: 200px;
+    padding: 30px 10px;
+  }
+
+  .sidebarTitle {
+    font-size: var(--font-size-small);
+  }
+
+  h3 {
+    font-size: var(--font-size-small);
+  }
+
+  button {
+    font-size: 0.8em;
+    padding: 3px 5px;
   }
 }

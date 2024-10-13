@@ -1,0 +1,64 @@
+/* src/styles/Toastify.css */
+
+/* Toastify CSS Overrides */
+.Toastify__toast {
+  font-family: var(--font-family);
+  font-size: var(--font-size-medium);
+  border-radius: var(--border-radius);
+  box-shadow: 0 4px 10px var(--shadow-color);
+  padding: 15px;
+  color: var(--text-color);
+  background-color: var(--container-bg);
+  transition: background-color var(--transition-speed),
+    color var(--transition-speed);
+}
+
+.Toastify__toast--success {
+  background-color: var(--success-color);
+  color: #fff;
+}
+
+.Toastify__toast--error {
+  background-color: var(--danger-color);
+  color: #fff;
+}
+
+.Toastify__toast--warning {
+  background-color: var(--warning-color);
+  color: #fff;
+}
+
+.Toastify__toast--info {
+  background-color: var(--primary-color);
+  color: #fff;
+}
+
+.Toastify__toast--dark {
+  background-color: var(--dark-gray);
+  color: #fff;
+}
+
+.Toastify__close-button {
+  color: var(--text-color);
+  opacity: 0.7;
+  transition: opacity var(--transition-speed);
+}
+
+.Toastify__close-button:hover {
+  opacity: 1;
+}
+
+.Toastify__progress-bar {
+  background: var(--accent-color);
+}
+
+.Toastify__toast-container {
+  width: 320px;
+}
+
+@media (max-width: 768px) {
+  .Toastify__toast-container {
+    width: 100%;
+    padding: 0 10px;
+  }
+}

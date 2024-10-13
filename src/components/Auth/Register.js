@@ -1,32 +1,38 @@
-import React, { useState } from "react";
-import axios from "axios";
+// src/components/Auth/Register.js
+import React, { useState, useContext } from "react";
+import axiosInstance from "../../axiosConfig"; // Verwenden der konfigurierten Axios-Instanz
 import { useNavigate, Link } from "react-router-dom";
 import styles from "./Register.module.css";
+import { AuthContext } from "../../context/AuthContext"; // Importiere AuthContext
 
 const Register = () => {
+  const { login } = useContext(AuthContext); // Zugriff auf die Login-Funktion aus AuthContext
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false); // Ladezustand, um Mehrfachübermittlungen zu verhindern
   const navigate = useNavigate();
-
-  const API_BASE_URL =
-    process.env.REACT_APP_API_BASE_URL || "http://localhost:5000";
 
   const handleRegister = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
-      await axios.post(`${API_BASE_URL}/register`, {
+      const response = await axiosInstance.post("/register", {
         username,
         password,
       });
-      setLoading(false);
-      alert("Benutzer erfolgreich registriert!");
-      navigate("/login");
+
+      const { token, user } = response.data;
+
+      // Wenn Token und Benutzer zurückgegeben werden, melde den Benutzer automatisch an
+      if (token && user) {
+        await login(token); // Verwende die Login-Funktion aus AuthContext
+        navigate("/products");
+      } else {
+        navigate("/login");
+      }
     } catch (error) {
       setLoading(false);
       console.error("Registrierung fehlgeschlagen", error);
-      alert("Registrierung fehlgeschlagen");
     }
   };
 
@@ -44,6 +50,7 @@ const Register = () => {
               onChange={(e) => setUsername(e.target.value)}
               placeholder="Benutzername"
               required
+              disabled={loading} // Deaktiviere Eingaben beim Laden
             />
             <input
               type="password"
@@ -51,8 +58,11 @@ const Register = () => {
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Passwort"
               required
+              disabled={loading} // Deaktiviere Eingaben beim Laden
             />
-            <button type="submit">Registrieren</button>
+            <button type="submit" disabled={loading}>
+              {loading ? "Lädt..." : "Registrieren"}
+            </button>
           </form>
         )}
         <p>

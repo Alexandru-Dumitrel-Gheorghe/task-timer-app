@@ -1,0 +1,262 @@
+/* src/components/CalendarSection/CalendarSection.module.css */
+@import "../../styles/variables.css";
+
+/* Container for the calendar section */
+.calendarContainer {
+  margin: 0px auto;
+  padding: 30px 40px;
+  max-width: 650px;
+  background-color: var(--container-bg);
+  border-radius: var(--border-radius);
+  box-shadow: 0 10px 25px var(--shadow-color);
+  border: 1px solid var(--primary-color);
+  position: relative;
+  overflow: hidden;
+  transition: transform var(--transition-speed),
+    box-shadow var(--transition-speed), background-color var(--transition-speed);
+  color: var(--text-color);
+}
+
+.calendarContainer:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px var(--shadow-color);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  position: relative;
+  z-index: 1;
+}
+
+.headerIcon {
+  margin-right: 10px;
+  font-size: 2rem;
+  color: var(--primary-color);
+}
+
+h2 {
+  font-size: 2rem;
+  margin: 0;
+  font-family: "Roboto", sans-serif;
+  color: var(--text-color);
+}
+
+.calendarWrapper {
+  width: 100%;
+  margin-bottom: 30px;
+  z-index: 1;
+  position: relative;
+}
+
+.customCalendar {
+  width: 100%;
+  border: none;
+  border-radius: var(--border-radius);
+  padding: 15px;
+  background: var(--background-color);
+  box-shadow: 0 5px 15px var(--shadow-color);
+  position: relative;
+  z-index: 1;
+  font-family: "Roboto", sans-serif;
+  color: var(--text-color);
+}
+
+.eventList {
+  margin-top: 20px;
+  z-index: 1;
+  position: relative;
+}
+
+.eventList h3 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  margin-bottom: 15px;
+  font-family: "Roboto", sans-serif;
+  color: var(--text-color);
+}
+
+.eventIcon {
+  margin-right: 8px;
+  color: var(--primary-color);
+  font-size: 1.5rem;
+}
+
+.eventItem {
+  background: var(--container-bg);
+  padding: 20px;
+  margin: 15px 0;
+  border-radius: var(--border-radius);
+  box-shadow: 0 4px 12px var(--shadow-color);
+  transition: transform var(--transition-speed),
+    box-shadow var(--transition-speed), background-color var(--transition-speed);
+  display: flex;
+  flex-direction: column;
+}
+
+.eventItem:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px var(--shadow-color);
+  background: var(--primary-hover-bg);
+}
+
+.eventHeader {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.eventHeader strong {
+  font-size: 1.2rem;
+  color: var(--text-color);
+}
+
+.detailIcon {
+  margin-right: 8px;
+  color: var(--secondary-text);
+  font-size: 1rem;
+}
+
+.noEvents {
+  text-align: center;
+  color: var(--secondary-text);
+  font-size: 1rem;
+  padding: 15px 0;
+  font-style: italic;
+}
+
+.usageOverview {
+  margin-top: 30px;
+  padding: 25px 20px;
+  background: var(--background-color);
+  border-radius: var(--border-radius);
+  box-shadow: 0 4px 12px var(--shadow-color);
+  text-align: center;
+  color: var(--text-color);
+}
+
+.usageOverview h3 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  margin-bottom: 20px;
+  font-family: "Roboto", sans-serif;
+  color: var(--text-color);
+}
+
+.usageIcon {
+  margin-right: 8px;
+  font-size: 1.5rem;
+  color: var(--primary-color);
+}
+
+.progressBars {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.progressItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.progressItem span {
+  font-weight: 500;
+  margin-bottom: 5px;
+  color: var(--text-color);
+}
+
+.progressBar {
+  width: 100%;
+  max-width: 500px;
+  height: 30px;
+  background-color: var(--progress-bg);
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+}
+
+.progressFill {
+  height: 100%;
+  background: var(--success-color);
+  width: 0;
+  min-width: 15%;
+  transition: width 1s ease-in-out, background 0.5s ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-weight: bold;
+  font-size: 1rem;
+  padding: 0 10px;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.progressFill::before {
+  content: attr(data-label);
+  position: absolute;
+  right: -35px;
+  color: var(--text-color);
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+@media (min-width: 768px) {
+  .progressBars {
+    flex-direction: row;
+    justify-content: space-around;
+  }
+
+  .progressBar {
+    max-width: 250px;
+  }
+}
+
+@media (max-width: 480px) {
+  .calendarContainer {
+    max-width: 90%;
+    padding: 20px;
+  }
+
+  .headerIcon {
+    font-size: 1.5rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  .eventList h3 {
+    font-size: 1.4rem;
+  }
+
+  .progressBar {
+    max-width: 100%;
+  }
+
+  .progressFill {
+    font-size: 0.8rem;
+  }
+}
+
+/* Dark Mode Support */
+body.dark-mode {
+  --container-bg: #2c2c2c;
+  --text-color: #e0e0e0;
+  --background-color: #3a3a3a;
+  --shadow-color: rgba(0, 0, 0, 0.7);
+  --primary-color: #1e88e5;
+  --primary-color-hover: #1565c0;
+  --progress-bg: #555555;
+  --success-color: #43a047;
+  --light-blue: #1e88e5;
+}

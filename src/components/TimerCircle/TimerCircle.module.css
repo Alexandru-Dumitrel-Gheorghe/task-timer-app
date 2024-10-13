@@ -1,82 +1,158 @@
+/* src/components/TimerCircle/TimerCircle.module.css */
+
 @import "../../styles/variables.css";
 
+/* Container pentru Timer */
 .timerContainer {
   position: fixed;
   bottom: 30px;
   right: 30px;
-  width: 140px;
-  background-color: var(--white);
+  width: 160px;
+  background-color: var(--container-bg);
   border-radius: var(--border-radius);
-  box-shadow: 0 4px 12px var(--shadow-color);
+  box-shadow: 0 8px 20px var(--shadow-color);
   z-index: 1100;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   overflow: hidden;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  padding: 10px;
+  padding: 15px;
 }
 
 .timerContainer:hover {
   transform: translateY(-8px);
-  box-shadow: 0 8px 20px var(--shadow-color);
+  box-shadow: 0 12px 24px var(--shadow-color);
 }
 
+/* Stil pentru progresul circular */
 .timerCircle {
-  width: 80%;
-  padding: 20px;
-  background-color: var(--primary-color);
+  width: 100px;
+  height: 100px;
+  margin-bottom: 15px;
+  background: linear-gradient(
+    135deg,
+    var(--primary-color),
+    var(--primary-color-hover)
+  );
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background-color 0.3s ease;
+  transition: background 0.3s ease;
 }
 
 .timerCircle:hover {
-  background-color: var(--primary-color-hover);
+  background: linear-gradient(
+    135deg,
+    var(--primary-color-hover),
+    var(--primary-color)
+  );
 }
 
+/* Conținutul timerului */
 .timerContent {
-  padding: 20px;
+  width: 100%;
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: rgba(255, 255, 255, 0.95);
-  border-top: 1px solid var(--primary-color);
-  box-shadow: inset 0 4px 6px rgba(0, 0, 0, 0.1);
-  width: 100%;
 }
 
+/* Numele produsului */
 .timerProductName {
   display: block;
   font-weight: bold;
-  margin-bottom: 8px;
+  margin-bottom: 5px;
   font-size: 1.1rem;
   color: var(--text-color);
 }
 
+/* Detalii produs */
 .timerArticleNumber,
 .timerTimeRequired,
 .timerNotes {
   display: block;
-  font-size: 0.95em;
+  font-size: 0.9em;
   color: var(--secondary-text);
-  margin-top: 5px;
+  margin-top: 3px;
+}
+
+/* Butoane de control */
+.timerActions {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* Stil pentru butoane */
+.actionButton {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 10px;
+  font-size: 0.9rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease,
+    box-shadow 0.3s ease;
+  color: #fff;
+  font-weight: 600;
+}
+
+/* Butonul de Pauză */
+.pauseButton {
+  background: linear-gradient(45deg, #ff9800, #f57c00);
+}
+
+.pauseButton:hover {
+  background: linear-gradient(45deg, #f57c00, #ef6c00);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 152, 0, 0.3);
+}
+
+/* Butonul de Reușare */
+.resumeButton {
+  background: linear-gradient(45deg, #4caf50, #388e3c);
+}
+
+.resumeButton:hover {
+  background: linear-gradient(45deg, #388e3c, #2e7d32);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+}
+
+/* Butonul de Oprire */
+.stopButton {
+  background: linear-gradient(45deg, #f44336, #d32f2f);
+}
+
+.stopButton:hover {
+  background: linear-gradient(45deg, #d32f2f, #c62828);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(244, 67, 54, 0.3);
 }
 
 /* Responsivitate */
 @media (max-width: 767px) {
   .timerContainer {
-    width: 180px;
+    width: 140px;
     bottom: 20px;
     right: 20px;
+    padding: 10px;
+  }
+
+  .timerCircle {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 10px;
   }
 
   .timerProductName {
-    font-size: 1em;
+    font-size: 1rem;
   }
 
   .timerArticleNumber,
@@ -84,12 +160,23 @@
   .timerNotes {
     font-size: 0.85em;
   }
+
+  .actionButton {
+    padding: 5px 8px;
+    font-size: 0.8rem;
+  }
 }
 
 @media (min-width: 768px) {
   .timerContainer {
-    width: 240px;
+    width: 180px;
     bottom: 30px;
     right: 30px;
+  }
+
+  .timerCircle {
+    width: 100px;
+    height: 100px;
+    margin-bottom: 15px;
   }
 }

@@ -1,0 +1,125 @@
+/* src/components/ChartSection/ChartSection.module.css */
+
+@import "../../styles/variables.css";
+
+/* Container for the chart section */
+.chartContainer {
+  flex: 1;
+  min-height: 450px;
+  padding: 30px;
+  background: var(--container-bg); /* Solid background for a clean look */
+  border-radius: var(--border-radius); /* Consistent border radius */
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+  display: flex;
+  flex-direction: column;
+  max-height: 650px;
+  transition: transform var(--transition-speed),
+    box-shadow var(--transition-speed), background-color var(--transition-speed);
+  border: 1px solid var(--primary-color); /* Primary color border for emphasis */
+}
+
+.chartContainer:hover {
+  transform: translateY(-5px); /* Subtle lift on hover */
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2); /* Enhanced shadow on hover */
+  background: var(--light-blue); /* Background change on hover */
+}
+
+.chartHeader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  position: relative;
+  z-index: 1;
+}
+
+.chartIcon {
+  margin-right: 10px;
+  font-size: 2rem;
+  color: var(--primary-color); /* Culoarea iconiței */
+}
+
+.chartTitle {
+  text-align: center;
+  color: var(--text-color); /* Primary text color */
+  margin: 0;
+  font-size: 2em;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  font-family: "Roboto", sans-serif; /* Modern font */
+  transition: color var(--transition-speed);
+}
+
+.chartWrapper {
+  flex: 1;
+  position: relative;
+  height: 100%;
+  background-color: rgba(
+    255,
+    255,
+    255,
+    0.8
+  ); /* More opaque for better contrast */
+  padding: 15px;
+  border-radius: var(--border-radius); /* Match border radius */
+  overflow: hidden;
+  box-shadow: inset 0 4px 10px rgba(0, 0, 0, 0.1); /* Soft inset shadow */
+}
+
+.chartWrapper canvas {
+  width: 100% !important;
+  height: 100% !important;
+  animation: fadeIn 1s ease; /* Fade-in animation */
+  border-radius: var(--border-radius); /* Consistent rounding */
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .chartTitle {
+    font-size: 1.7em; /* Adjust title size */
+    color: var(--secondary-text); /* Use secondary text color */
+  }
+}
+
+@media (max-width: 768px) {
+  .chartContainer {
+    padding: 20px; /* Adjust padding for smaller screens */
+  }
+  .chartTitle {
+    font-size: 1.4em; /* Adjust title size */
+    color: var(--secondary-text);
+  }
+}
+
+@media (max-width: 576px) {
+  .chartContainer {
+    padding: 15px; /* Further adjustment for mobile */
+  }
+  .chartTitle {
+    font-size: 1.2em; /* Smaller title for mobile */
+    color: var(--secondary-text);
+  }
+}
+
+/* Dark Mode Support */
+body.dark-mode {
+  --container-bg: #2c2c2c;
+  --text-color: #e0e0e0;
+  --background-color: #3a3a3a;
+  --shadow-color: rgba(0, 0, 0, 0.7);
+  --primary-color: #1e88e5;
+  --primary-color-hover: #1565c0;
+  --progress-bg: #555555;
+  --success-color: #43a047;
+  --light-blue: #1e88e5;
+  --tooltip-bg: #424242; /* Tooltip background pentru dark mode */
+}

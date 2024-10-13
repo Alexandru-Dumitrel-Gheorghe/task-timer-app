@@ -1,17 +1,17 @@
 @import "../../styles/variables.css";
 
 .productCard {
-  background-color: var(--white);
-  border: 1px solid var(--border-color);
-  border-radius: var(--border-radius);
+  background-color: var(--white); /* Fundal utilizând variabilă */
+  border: 1px solid var(--border-color); /* Bordură utilizând variabilă */
+  border-radius: var(--border-radius); /* Rotunjire utilizând variabilă */
   padding: 20px;
-  box-shadow: 0 2px 8px var(--shadow-color);
+  box-shadow: 0 2px 8px var(--shadow-color); /* Umbra utilizând variabilă */
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .productCard:hover {
   transform: translateY(-5px);
-  box-shadow: 0 6px 12px var(--shadow-color);
+  box-shadow: 0 6px 12px var(--shadow-color); /* Umbra mai pronunțată la hover */
 }
 
 .productHeader {
@@ -22,13 +22,13 @@
 
 .productTitle {
   margin: 0;
-  font-size: var(--font-size-large);
-  color: var(--text-color);
+  font-size: var(--font-size-large); /* Dimensiune font utilizând variabilă */
+  color: var(--text-color); /* Culoare text utilizând variabilă */
 }
 
 .articleNumber {
-  font-size: var(--font-size-small);
-  color: var(--secondary-text);
+  font-size: var(--font-size-small); /* Dimensiune font utilizând variabilă */
+  color: var(--secondary-text); /* Culoare utilizând variabilă */
 }
 
 .productBody {
@@ -45,24 +45,24 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  color: var(--text-color);
+  color: var(--text-color); /* Culoare utilizând variabilă */
 }
 
 .icon {
   font-size: 1.2em;
-  color: var(--primary-color);
+  color: var(--primary-color); /* Culoare utilizând variabilă */
 }
 
 .currentWork {
   margin-top: 10px;
-  font-size: var(--font-size-medium);
-  color: var(--success-color);
+  font-size: var(--font-size-medium); /* Dimensiune font utilizând variabilă */
+  color: var(--success-color); /* Culoare utilizând variabilă */
 }
 
 .progressBar {
   position: relative;
   height: 10px;
-  background-color: var(--light-gray);
+  background-color: var(--light-gray); /* Fundal utilizând variabilă */
   border-radius: 5px;
   overflow: hidden;
   margin-top: 20px;
@@ -70,8 +70,8 @@
 
 .progress {
   height: 100%;
-  background-color: var(--primary-color);
-  transition: width 0.5s ease;
+  background-color: var(--primary-color); /* Culoare utilizând variabilă */
+  transition: width 0.5s ease; /* Animație pentru progres */
 }
 
 .productFooter {
@@ -90,61 +90,69 @@
   gap: 8px;
   padding: 10px 20px;
   border: none;
-  border-radius: var(--border-radius);
+  border-radius: var(--border-radius); /* Rotunjire utilizând variabilă */
   cursor: pointer;
-  font-size: var(--font-size-medium);
-  color: #fff;
+  font-size: var(--font-size-medium); /* Dimensiune font utilizând variabilă */
+  color: #fff; /* Culoare text */
   transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
 .startButton {
-  background-color: var(--success-color);
+  background-color: var(--success-color); /* Culoare utilizând variabilă */
 }
 
 .startButton:hover {
-  background-color: var(--success-hover);
+  background-color: var(
+    --success-hover
+  ); /* Culoare utilizând variabilă la hover */
   transform: translateY(-2px);
 }
 
 .pauseButton {
-  background-color: var(--warning-color);
+  background-color: var(--warning-color); /* Culoare utilizând variabilă */
 }
 
 .pauseButton:hover {
-  background-color: var(--warning-hover);
+  background-color: var(
+    --warning-hover
+  ); /* Culoare utilizând variabilă la hover */
   transform: translateY(-2px);
 }
 
 .stopButton {
-  background-color: var(--danger-color);
+  background-color: var(--danger-color); /* Culoare utilizând variabilă */
 }
 
 .stopButton:hover {
-  background-color: var(--danger-hover);
+  background-color: var(
+    --danger-hover
+  ); /* Culoare utilizând variabilă la hover */
   transform: translateY(-2px);
 }
 
 .startButton:disabled,
 .pauseButton:disabled,
 .stopButton:disabled {
-  background-color: var(--disabled-color);
-  cursor: not-allowed;
+  background-color: var(
+    --disabled-color
+  ); /* Culoare pentru butoanele dezactivate */
+  cursor: not-allowed; /* Cursor pentru butoanele dezactivate */
 }
 
 @media (max-width: 768px) {
   .productDetails {
-    flex-direction: column;
+    flex-direction: column; /* Schimbă orientarea pe ecrane mici */
   }
 
   .productFooter {
-    flex-direction: column;
+    flex-direction: column; /* Schimbă orientarea pe ecrane mici */
     gap: 10px;
   }
 
   .startButton,
   .pauseButton,
   .stopButton {
-    width: 100%;
+    width: 100%; /* Butoanele ocupă întregul spațiu disponibil */
     justify-content: center;
   }
 }

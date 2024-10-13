@@ -1,293 +1,221 @@
-import React, { useState, useEffect, useCallback, useMemo } from "react";
-import axios from "axios";
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+  useContext,
+} from "react";
+import axiosInstance from "../axiosConfig";
 import { useNavigate } from "react-router-dom";
 import styles from "./ProductList.module.css";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { v4 as uuidv4 } from "uuid";
+import { useSnackbar } from "notistack"; // Importăm useSnackbar
 
-// Import components correctly according to your project structure
+// Import components
 import Header from "./Header/Header";
 import Sidebar from "./Sidebar/Sidebar";
 import TimerCircle from "./TimerCircle/TimerCircle";
 import Controls from "./Controls/Controls";
 import CategoryList from "./CategoryList/CategoryList";
 import ChartSection from "./ChartSection/ChartSection";
+import CalendarSection from "./Calendar/CalendarSection";
 import Loading from "./Loading/Loading";
+import { AuthContext } from "../context/AuthContext";
 
 const ProductList = () => {
+  const { isAuthenticated, user } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const { enqueueSnackbar } = useSnackbar(); // Folosim hook-ul pentru notificări
+
   const [categories, setCategories] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [timers, setTimers] = useState({});
   const [expandedCategory, setExpandedCategory] = useState(null);
   const [dailyData, setDailyData] = useState([]);
-  const [currentWorkingProduct, setCurrentWorkingProduct] = useState(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [notifications, setNotifications] = useState([]);
 
-  const API_BASE_URL =
-    process.env.REACT_APP_API_BASE_URL || "http://localhost:5000";
+  // Adăugați starea pentru data selectată
+  const [selectedDate, setSelectedDate] = useState(new Date());
 
-  const navigate = useNavigate();
-
+  // Functia pentru fetch-ul categoriilor
   const fetchCategories = useCallback(async () => {
     try {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        navigate("/login");
-        return;
-      }
-      const response = await axios.get(`${API_BASE_URL}/products`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      console.log("API Response:", response.data);
+      const response = await axiosInstance.get("/products");
+      console.log("API Antwort (categorii):", response.data);
       setCategories(response.data);
-      initializeTimers(response.data);
     } catch (error) {
       console.error("Fehler beim Laden der Kategorien:", error);
-      toast.error("Fehler beim Laden der Kategorien.");
       setCategories([]);
+      enqueueSnackbar("Fehler beim Laden der Kategorien.", {
+        variant: "error",
+      }); // Notificare de eroare
     } finally {
       setIsLoading(false);
     }
-  }, [API_BASE_URL, navigate]);
+  }, [enqueueSnackbar]);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) {
+    if (!isAuthenticated) {
       navigate("/login");
-    } else {
-      const savedTimers = localStorage.getItem("timers");
-      const savedDailyData = localStorage.getItem("dailyData");
-
-      if (savedTimers) {
-        setTimers(JSON.parse(savedTimers));
-      }
-
+    } else if (user && user._id) {
+      const savedDailyData = localStorage.getItem(`dailyData_${user._id}`);
       if (savedDailyData) {
-        setDailyData(JSON.parse(savedDailyData));
+        try {
+          setDailyData(JSON.parse(savedDailyData));
+        } catch (error) {
+          console.error("Fehler beim Parsen der täglichen Daten:", error);
+          setDailyData([]);
+          localStorage.removeItem(`dailyData_${user._id}`);
+        }
       }
-
       fetchCategories();
     }
-  }, [fetchCategories, navigate]);
+  }, [fetchCategories, isAuthenticated, navigate, user]);
 
-  const initializeTimers = (categoriesData) => {
-    const newTimers = {};
-    if (Array.isArray(categoriesData)) {
-      categoriesData.forEach((category) => {
-        if (Array.isArray(category.products)) {
-          category.products.forEach((product) => {
-            newTimers[product._id] = { seconds: 0, isRunning: false };
-          });
-        }
-      });
-    }
-    setTimers(newTimers);
-  };
+  useEffect(() => {
+    if (!isAuthenticated) return;
+
+    const interval = setInterval(() => {
+      fetchCategories();
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [fetchCategories, isAuthenticated]);
 
   const handleToggleCategory = (category) => {
+    console.log("Toggling category:", category);
     setExpandedCategory(expandedCategory === category ? null : category);
   };
 
-  const updateTimerInDB = useCallback(
-    async (category, productId, updateData) => {
-      try {
-        const token = localStorage.getItem("token");
-        const url = `${API_BASE_URL}/products/${encodeURIComponent(
-          category
-        )}/${productId}`;
-        await axios.put(url, updateData, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-      } catch (error) {
-        console.error("Fehler beim Aktualisieren des Timers in der DB:", error);
-        throw error;
-      }
-    },
-    [API_BASE_URL]
-  );
-
   const handleStart = async (category, productId) => {
-    const runningProduct = Object.keys(timers).find(
-      (id) => timers[id].isRunning
+    console.log(
+      "Starting timer for category:",
+      category,
+      "and product:",
+      productId
     );
-    if (runningProduct && runningProduct !== productId) {
-      toast.error(
-        "Ein anderer Timer läuft bereits. Bitte stoppen Sie ihn zuerst."
-      );
-      return;
-    }
-
-    setCurrentWorkingProduct(productId);
-    setTimers((prev) => {
-      const updatedTimers = {
-        ...prev,
-        [productId]: { ...prev[productId], isRunning: true },
-      };
-      localStorage.setItem("timers", JSON.stringify(updatedTimers));
-      return updatedTimers;
-    });
-
-    const updateData = { status: "In Bearbeitung", elapsedTime: 0 };
     try {
-      await updateTimerInDB(category, productId, updateData);
-      toast.success("Timer gestartet!");
+      const url = `/products/${encodeURIComponent(
+        category
+      )}/${productId}/start`;
+      await axiosInstance.post(url, {});
+      enqueueSnackbar("Timer gestartet!", { variant: "success" }); // Notificare de succes
+      fetchCategories();
     } catch (error) {
-      toast.error("Fehler beim Starten des Timers.");
+      console.error("Fehler beim Starten des Timers:", error);
+      enqueueSnackbar("Fehler beim Starten des Timers.", { variant: "error" }); // Notificare de eroare
     }
   };
 
   const handlePause = async (category, productId) => {
-    setTimers((prev) => {
-      const updatedTimers = {
-        ...prev,
-        [productId]: { ...prev[productId], isRunning: false },
-      };
-      localStorage.setItem("timers", JSON.stringify(updatedTimers));
-      return updatedTimers;
-    });
-
-    const updateData = {
-      status: "Pausiert",
-      elapsedTime: timers[productId].seconds,
-    };
+    console.log(
+      "Pausing timer for category:",
+      category,
+      "and product:",
+      productId
+    );
     try {
-      await updateTimerInDB(category, productId, updateData);
-      toast.info("Timer pausiert.");
+      const url = `/products/${encodeURIComponent(
+        category
+      )}/${productId}/pause`;
+      await axiosInstance.post(url, {});
+      enqueueSnackbar("Timer pausiert.", { variant: "info" }); // Notificare informativă
+      fetchCategories();
     } catch (error) {
-      toast.error("Fehler beim Pausieren des Timers.");
+      console.error("Fehler beim Pausieren des Timers:", error);
+      enqueueSnackbar("Fehler beim Pausieren des Timers.", {
+        variant: "error",
+      }); // Notificare de eroare
     }
   };
 
   const handleStop = async (category, productId) => {
-    const elapsedTime = timers[productId].seconds;
-    setTimers((prev) => {
-      const updatedTimers = {
-        ...prev,
-        [productId]: { seconds: 0, isRunning: false },
-      };
-      localStorage.setItem("timers", JSON.stringify(updatedTimers));
-      return updatedTimers;
-    });
-
-    const currentDate = new Date();
-    const product = categories
-      .find((cat) => cat.category === category)
-      ?.products.find((prod) => prod._id === productId);
-
-    const productName = product?.equipment || "";
-
-    setDailyData((prev) => {
-      const newData = [
-        ...prev,
-        {
-          productId,
-          date: currentDate.toISOString(),
-          elapsedTime,
-          productName,
-          category: category,
-          articleNumber: product?.articleNumber || "",
-          timeRequired: product?.timeRequired || "",
-          notes: product?.notes || "",
-        },
-      ];
-      localStorage.setItem("dailyData", JSON.stringify(newData));
-      return newData;
-    });
-
-    const updateData = { status: "Abgeschlossen", elapsedTime };
+    console.log(
+      "Stopping timer for category:",
+      category,
+      "and product:",
+      productId
+    );
     try {
-      await updateTimerInDB(category, productId, updateData);
-      toast.success("Timer gestoppt und Daten gespeichert.");
-      setCurrentWorkingProduct(null);
+      const url = `/products/${encodeURIComponent(category)}/${productId}/stop`;
+      await axiosInstance.post(url, {});
+      enqueueSnackbar("Timer gestoppt und Daten gespeichert.", {
+        variant: "success",
+      }); // Notificare de succes
+      fetchCategories();
+
+      const currentDate = new Date();
+      const product = categories
+        .find((cat) => cat.category === category)
+        ?.products.find((prod) => prod._id === productId);
+
+      const productName = product?.equipment || "";
+
+      setDailyData((prev) => {
+        const newData = [
+          ...prev,
+          {
+            id: uuidv4(),
+            productId,
+            date: currentDate.toISOString(),
+            elapsedTime: product?.elapsedTime || 0,
+            productName,
+            category,
+            articleNumber: product?.articleNumber || "",
+            timeRequired: product?.timeRequired || "",
+            notes: product?.notes || "",
+          },
+        ];
+        try {
+          localStorage.setItem(
+            `dailyData_${user._id}`,
+            JSON.stringify(newData)
+          );
+        } catch (error) {
+          console.error("Fehler beim Speichern der täglichen Daten:", error);
+        }
+        return newData;
+      });
+
       setNotifications((prev) => [
         ...prev,
-        `Timer für ${productName} wurde erfolgreich gestoppt. Verbrachte Zeit: ${formatTime(
-          elapsedTime
+        `Timer für ${productName} erfolgreich gestoppt. Verstrichene Zeit: ${formatTime(
+          product?.elapsedTime || 0
         )}`,
       ]);
     } catch (error) {
-      toast.error("Fehler beim Stoppen des Timers.");
+      console.error("Fehler beim Stoppen des Timers:", error);
+      enqueueSnackbar("Fehler beim Stoppen des Timers.", { variant: "error" }); // Notificare de eroare
     }
   };
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setTimers((prev) => {
-        const updatedTimers = { ...prev };
-        Object.keys(updatedTimers).forEach((productId) => {
-          if (updatedTimers[productId].isRunning) {
-            updatedTimers[productId].seconds += 1;
-          }
-        });
-        localStorage.setItem("timers", JSON.stringify(updatedTimers));
-        return updatedTimers;
-      });
-    }, 1000);
-
-    const resetAtMidnight = () => {
-      const now = new Date();
-      const midnight = new Date();
-      midnight.setHours(24, 0, 0, 0);
-
-      const timeUntilMidnight = midnight.getTime() - now.getTime();
-      if (timeUntilMidnight > 0) {
-        setTimeout(() => {
-          setTimers((prev) => {
-            const resetTimers = { ...prev };
-            Object.keys(resetTimers).forEach((productId) => {
-              resetTimers[productId].seconds = 0;
-              resetTimers[productId].isRunning = false;
-              const productCategory = categories.find((cat) =>
-                cat.products.some((prod) => prod._id === productId)
-              );
-              if (productCategory) {
-                updateTimerInDB(productCategory.category, productId, {
-                  status: "Nicht gestartet",
-                  elapsedTime: 0,
-                }).catch((error) => {
-                  console.error("Fehler beim Zurücksetzen des Timers:", error);
-                });
-              }
-            });
-            toast.info("Die Zeit wurde um Mitternacht zurückgesetzt.");
-            localStorage.setItem("timers", JSON.stringify(resetTimers));
-            return resetTimers;
-          });
-        }, timeUntilMidnight);
-      }
-    };
-
-    resetAtMidnight();
-
-    return () => {
-      clearInterval(interval);
-    };
-  }, [categories, updateTimerInDB]);
-
   const generatePDF = () => {
+    if (dailyData.length === 0) {
+      enqueueSnackbar(
+        "Keine Daten verfügbar, um einen PDF-Bericht zu erstellen.",
+        { variant: "warning" }
+      );
+      return;
+    }
+
     const doc = new jsPDF();
     doc.text("Produkt-Timer-Bericht", 14, 16);
+
     const tableColumn = [
       "Kategorie",
       "Produkt",
       "Artikelnummer",
       "Benötigte Zeit",
-      "Verbrachte Zeit",
-      "Datum und Uhrzeit",
+      "Verstrichene Zeit",
+      "Datum & Uhrzeit",
       "Notizen",
     ];
-    const tableRows = [];
 
-    dailyData.forEach((item) => {
+    const tableRows = dailyData.map((item) => {
       const formattedDate = new Date(item.date).toLocaleString("de-DE", {
         year: "numeric",
         month: "2-digit",
@@ -296,21 +224,16 @@ const ProductList = () => {
         minute: "2-digit",
       });
 
-      tableRows.push([
+      return [
         item.category,
         item.productName,
         item.articleNumber || "N/A",
-        item.timeRequired,
+        formatTime(item.timeRequired),
         formatTime(item.elapsedTime),
         formattedDate,
         item.notes || "N/A",
-      ]);
+      ];
     });
-
-    if (tableRows.length === 0) {
-      toast.warn("Keine Daten zum Generieren des PDF-Berichts.");
-      return;
-    }
 
     doc.autoTable({
       head: [tableColumn],
@@ -318,30 +241,35 @@ const ProductList = () => {
       startY: 20,
     });
 
-    doc.save("produkt-timer-bericht.pdf");
-    toast.success("PDF-Bericht erfolgreich generiert.");
+    doc.save("Produkt-Timer-Bericht.pdf");
+    enqueueSnackbar("PDF-Bericht erfolgreich erstellt.", {
+      variant: "success",
+    }); // Notificare de succes
   };
 
   const formatTime = (seconds) => {
-    const hrs = Math.floor(seconds / 3600)
-      .toString()
-      .padStart(2, "0");
-    const mins = Math.floor((seconds % 3600) / 60)
-      .toString()
-      .padStart(2, "0");
-    const secs = (seconds % 60).toString().padStart(2, "0");
+    const hrs = String(Math.floor(seconds / 3600)).padStart(2, "0");
+    const mins = String(Math.floor((seconds % 3600) / 60)).padStart(2, "0");
+    const secs = String(seconds % 60).padStart(2, "0");
     return `${hrs}:${mins}:${secs}`;
   };
 
   const resetDailyData = () => {
     setDailyData([]);
-    localStorage.setItem("dailyData", JSON.stringify([]));
-    toast.info("Die täglichen Daten wurden zurückgesetzt.");
+    try {
+      localStorage.removeItem(`dailyData_${user._id}`);
+    } catch (error) {
+      console.error("Fehler beim Entfernen der täglichen Daten:", error);
+    }
+    enqueueSnackbar("Tägliche Daten wurden zurückgesetzt.", {
+      variant: "info",
+    }); // Notificare informativă
   };
 
   const filteredCategories = useMemo(() => {
     if (!Array.isArray(categories)) return [];
     if (!searchTerm) return categories;
+
     return categories
       .map((category) => ({
         ...category,
@@ -354,30 +282,64 @@ const ProductList = () => {
       .filter((category) => category.products.length > 0);
   }, [categories, searchTerm]);
 
+  // Filtrați datele în funcție de data selectată
+  const formattedSelectedDate = useMemo(() => {
+    const year = selectedDate.getFullYear();
+    const month = String(selectedDate.getMonth() + 1).padStart(2, "0");
+    const day = String(selectedDate.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  }, [selectedDate]);
+
+  const filteredData = useMemo(() => {
+    return dailyData.filter((item) =>
+      item.date.startsWith(formattedSelectedDate)
+    );
+  }, [dailyData, formattedSelectedDate]);
+
+  // Derive runningData from categories
+  const runningData = useMemo(() => {
+    return categories.flatMap((category) =>
+      category.products
+        .filter((product) => product.isRunning)
+        .map((product) => ({
+          productId: product._id,
+          category: category.category,
+          date: product.date, // Presupunem că 'date' reprezintă momentul în care a început
+          elapsedTime: product.elapsedTime, // Presupunem că backend-ul actualizează 'elapsedTime' periodic
+          productName: product.equipment,
+          articleNumber: product.articleNumber,
+          timeRequired: product.timeRequired,
+          notes: product.notes,
+        }))
+    );
+  }, [categories]);
+
   if (isLoading) {
+    return <Loading />;
+  }
+
+  if (!user || !user._id) {
     return <Loading />;
   }
 
   return (
     <div className={`${styles.dashboard} ${isDarkMode ? styles.darkMode : ""}`}>
-      <ToastContainer />
-
-      {/* Header */}
       <Header
         isDarkMode={isDarkMode}
         toggleDarkMode={() => setIsDarkMode(!isDarkMode)}
         isSidebarOpen={isSidebarOpen}
         toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
         notifications={notifications}
+        categories={categories} // Trebuie să transmiteți categoriile dacă Header le folosește
       />
 
-      {/* Sidebar */}
       <Sidebar
         isSidebarOpen={isSidebarOpen}
         closeSidebar={() => setIsSidebarOpen(false)}
+        generatePDF={generatePDF}
+        resetDailyData={resetDailyData}
       />
 
-      {/* Overlay for Sidebar */}
       {isSidebarOpen && (
         <div
           className={styles.overlay}
@@ -385,41 +347,32 @@ const ProductList = () => {
         ></div>
       )}
 
-      {/* Timer Circle */}
-      <TimerCircle
-        currentWorkingProduct={currentWorkingProduct}
-        categories={categories}
-        timers={timers}
-        formatTime={formatTime}
-      />
+      <TimerCircle categories={categories} formatTime={formatTime} />
 
-      {/* Main Content */}
       <main className={styles.mainContent}>
-        {/* Controls Section */}
-        <Controls
-          searchTerm={searchTerm}
-          setSearchTerm={setSearchTerm}
-          generatePDF={generatePDF}
-          resetDailyData={resetDailyData}
-        />
+        <Controls searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
 
-        {/* Content Wrapper */}
         <div className={styles.contentWrapper}>
-          {/* Product List */}
           <CategoryList
             categories={filteredCategories}
             expandedCategory={expandedCategory}
             handleToggleCategory={handleToggleCategory}
-            timers={timers}
             handleStart={handleStart}
             handlePause={handlePause}
             handleStop={handleStop}
-            currentWorkingProduct={currentWorkingProduct}
             formatTime={formatTime}
           />
 
-          {/* Chart Section */}
-          <ChartSection dailyData={dailyData} />
+          {/* Transmiteți datele filtrate și runningData către ChartSection */}
+          <ChartSection dailyData={filteredData} runningData={runningData} />
+
+          {/* Transmiteți selectedDate, setSelectedDate, dailyData și runningData către CalendarSection */}
+          <CalendarSection
+            selectedDate={selectedDate}
+            setSelectedDate={setSelectedDate}
+            dailyData={dailyData}
+            runningData={runningData}
+          />
         </div>
       </main>
     </div>

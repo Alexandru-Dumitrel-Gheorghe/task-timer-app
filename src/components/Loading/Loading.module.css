@@ -1,11 +1,33 @@
-/* src/components/Loading/Loading.module.css */
-@import "../../styles/variables.css";
-
-.loading {
+.loadingContainer {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  height: 100vh;
-  font-size: var(--font-size-large);
-  color: var(--primary-color);
+  justify-content: center;
+  height: 100vh; /* Umple întreaga înălțime a ferestrei */
+  background-color: #f0f0f0; /* Poți schimba culoarea de fundal după preferință */
+}
+
+.loadingSpinner {
+  border: 8px solid #f3f3f3; /* Culoarea de fundal a spinner-ului */
+  border-top: 8px solid #3498db; /* Culoarea spinner-ului */
+  border-radius: 50%;
+  width: 60px; /* Lățimea spinner-ului */
+  height: 60px; /* Înălțimea spinner-ului */
+  animation: spin 2s linear infinite; /* Animație de rotație */
+}
+
+.loadingText {
+  margin-top: 20px; /* Spațiu între spinner și text */
+  font-size: 1.5em; /* Dimensiunea textului */
+  color: #333; /* Culoarea textului */
+}
+
+/* Definirea animației de rotație */
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }

@@ -1,30 +1,41 @@
+/* src/styles/variables.css */
+
 :root {
-  /* Color Palette */
-  --primary-color: #007bff; /* Bright blue for a fresh look */
-  --primary-hover: #0056b3; /* Darker shade for hover effect */
-  --accent-color: #ff5a00; /* Bright orange for accent elements */
-  --success-color: #28a745; /* Green for success messages */
-  --success-hover: #218838; /* Darker green on hover */
-  --warning-color: #ffc107; /* Yellow for warnings */
-  --warning-hover: #e0a800; /* Darker yellow on hover */
-  --danger-color: #dc3545; /* Red for error messages */
-  --danger-hover: #c82333; /* Darker red on hover */
+  --container-bg: #ffffff;
+  --text-color: #333333;
+  --background-color: #fafafa;
+  --shadow-color: rgba(0, 0, 0, 0.1);
+  --primary-color: hsla(170, 50%, 45%, 1); /* Culoarea specificată */
+  --primary-color-hover: hsla(
+    170,
+    50%,
+    35%,
+    1
+  ); /* Culoare mai închisă pentru hover */
+  --accent-color: #ffcd02;
+  --success-color: #27ae60;
+  --progress-bg: #e0e0e0;
+  --progress-fill-color: var(--primary-color);
+  --border-radius: 15px;
+  --transition-speed: 0.3s;
+  --danger-hover: #bd2130; /* Adăugat pentru logoutButton */
+  --muted-text: #777777; /* Adăugat pentru logoutText */
+  --light-blue: #f0f8ff; /* Adăugat pentru notificationItem:hover */
+}
 
-  --background-color: #f4f4f9; /* Soft light background */
-  --container-bg: #ffffff; /* White for container backgrounds */
-  --text-color: #343a40; /* Dark grey for primary text */
-  --secondary-text: #6c757d; /* Light grey for secondary text */
-  --shadow-color: rgba(0, 0, 0, 0.15); /* Softer shadow for depth */
-  --border-color: #ced4da; /* Light grey for borders */
-
-  /* Typography */
-  --font-family: "Poppins", sans-serif; /* Modern font for a clean look */
-  --font-size-base: 16px; /* Base font size */
-  --font-size-large: 1.6rem; /* Larger size for headings */
-  --font-size-medium: 1.125rem; /* Medium size for body text */
-  --font-size-small: 0.875rem; /* Smaller size for captions */
-
-  /* Spacing & Sizing */
-  --border-radius: 12px; /* Slightly larger rounding for a softer appearance */
-  --transition-speed: 0.4s; /* Slightly slower transition for smoother effects */
+/* Dark Mode Variables */
+body.dark-mode {
+  --container-bg: #2c2c2c;
+  --text-color: #e0e0e0;
+  --background-color: #3a3a3a;
+  --shadow-color: rgba(0, 0, 0, 0.7);
+  --primary-color: hsla(170, 50%, 35%, 1); /* Ajustată pentru Dark Mode */
+  --primary-color-hover: hsla(170, 50%, 25%, 1);
+  --accent-color: #ffcd02;
+  --success-color: #27ae60;
+  --progress-bg: #555555;
+  --progress-fill-color: var(--primary-color);
+  --danger-hover: #c82333; /* Ajustată pentru Dark Mode */
+  --muted-text: #cccccc; /* Ajustată pentru Dark Mode */
+  --light-blue: rgba(0, 0, 0, 0.05); /* Ajustată pentru Dark Mode */
 }

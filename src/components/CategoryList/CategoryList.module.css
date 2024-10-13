@@ -1,54 +1,392 @@
+/* src/components/CategoryList/CategoryList.module.css */
+
 @import "../../styles/variables.css";
 
-.productSection {
-  flex: 2;
-  background-color: var(--container-bg);
-  padding: 30px; /* Increased padding for better spacing */
-  border-radius: var(--border-radius);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15); /* Softer shadow */
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  overflow: hidden; /* Asigură că nu există overflow */
-}
-
-.sectionTitle {
-  font-size: 2em; /* Increased font size */
-  font-weight: bold;
-  margin-bottom: 20px;
-  color: var(--primary-color);
-  text-align: center;
-}
-
+/* Container for the entire category list */
 .categoryList {
   display: flex;
   flex-direction: column;
-  gap: 25px;
-  width: 100%;
-  max-width: 1200px; /* Limităm lățimea maximă pentru un aspect mai plăcut */
-  padding: 10px; /* Add padding to create space around items */
+  gap: 20px;
+  padding: 20px;
+  background: var(--container-bg, #f0f0f0);
   border-radius: var(--border-radius);
+  box-shadow: 0 4px 15px var(--shadow-color);
+  max-width: 400px !important; /* Ajustat pentru a preveni supraîncărcarea pe desktop */
+  width: 100%; /* Utilizează complet spațiul disponibil */
+  margin: 0 auto;
+  transition: box-shadow var(--transition-speed) ease,
+    transform var(--transition-speed) ease;
 }
 
-/* Media Queries for Responsiveness */
-@media (max-width: 768px) {
-  .productSection {
-    padding: 1px;
+/* Hover effect for category list */
+.categoryList:hover {
+  box-shadow: 0 6px 20px var(--shadow-color);
+}
+
+/* Individual category card styling */
+.categoryCard {
+  background: var(--card-bg, #ffffff);
+  border-radius: 12px;
+  box-shadow: 0 2px 10px var(--shadow-color);
+  transition: transform var(--transition-speed) ease,
+    box-shadow var(--transition-speed) ease;
+  overflow: hidden;
+}
+
+/* Hover effect for category card */
+.categoryCard:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 15px var(--shadow-color);
+}
+
+/* Header for each category */
+.categoryHeader {
+  position: relative; /* Necesar pentru pseudo-elemente */
+  background: var(--primary-color); /* Utilizare variabilă */
+  color: var(--container-bg, #ffffff);
+  padding: 15px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  overflow: hidden; /* Ascunde overflow-ul de la pseudo-elemente */
+  transition: background-color var(--transition-speed) ease;
+}
+
+.categoryHeader:hover {
+  background: var(--primary-color-hover);
+}
+
+.categoryTitle {
+  margin: 0;
+  font-size: 1.6rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+}
+
+.headerIcon {
+  margin-right: 10px;
+  color: var(--container-bg, #ffffff);
+  font-size: 1.5rem;
+}
+
+.activeProductLabel {
+  margin-left: 10px;
+  font-size: 1rem;
+  color: var(--accent-color, #ffcd02);
+  font-weight: 600;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Toggle icon styling */
+.toggleIcon {
+  font-size: 1.2rem;
+  transition: transform var(--transition-speed) ease;
+}
+
+/* Product list container */
+.productList {
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(250px, 1fr)
+  ); /* Ajustat pentru flexibilitate */
+  gap: 20px;
+  padding: 15px 20px;
+  background: var(--background-color, #fafafa);
+  border-top: 1px solid var(--shadow-color, #e0e0e0);
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Individual product card styling */
+.productCard {
+  background: var(--container-bg, #ffffff);
+  border-radius: 10px;
+  box-shadow: 0 2px 8px var(--shadow-color);
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform var(--transition-speed) ease,
+    box-shadow var(--transition-speed) ease;
+  border: 1px solid var(--shadow-color, #e0e0e0);
+}
+
+.productCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px var(--shadow-color);
+}
+
+.productCard.active {
+  border-color: var(--accent-color, #ffcd02);
+  box-shadow: 0 4px 12px rgba(255, 205, 2, 0.2);
+}
+
+.productInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.productName {
+  font-size: 1.4rem;
+  margin: 0;
+  color: var(--text-color, #333333);
+  font-weight: 600;
+  transition: color var(--transition-speed);
+}
+
+.productCard.active .productName {
+  color: var(--accent-color, #ffcd02);
+}
+
+.productDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.productDetailItem {
+  display: flex;
+  align-items: center;
+  font-size: 1rem;
+  color: var(--text-color, #777777);
+}
+
+.detailIcon {
+  margin-right: 8px;
+  color: var(--accent-color, #ffcd02);
+  font-size: 1.2rem;
+}
+
+.productNotes {
+  font-size: 0.9rem;
+  color: var(--text-color, #777777);
+  margin-top: 5px;
+}
+
+/* Action buttons */
+.productActions {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.actionButton {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 12px;
+  font-size: 0.9rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color var(--transition-speed) ease, transform 0.2s ease,
+    box-shadow var(--transition-speed) ease;
+  color: var(--container-bg, #ffffff);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.startButton {
+  background: linear-gradient(45deg, #28a745, #218838);
+}
+
+.startButton:hover {
+  background: linear-gradient(45deg, #218838, #1e7e34);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(40, 167, 69, 0.2);
+}
+
+.pauseButton {
+  background: linear-gradient(45deg, #ffc107, #e0a800);
+}
+
+.pauseButton:hover {
+  background: linear-gradient(45deg, #e0a800, #d39e00);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 193, 7, 0.2);
+}
+
+.stopButton {
+  background: linear-gradient(45deg, #dc3545, #c82333);
+}
+
+.stopButton:hover {
+  background: linear-gradient(45deg, #c82333, #bd2130);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(220, 53, 69, 0.2);
+}
+
+/* No products message */
+.noProducts {
+  text-align: center;
+  color: var(--text-color, #777777);
+  font-size: 1rem;
+  padding: 15px 0;
+}
+
+/* Responsive design adjustments */
+
+/* Ecrane foarte mari */
+@media (min-width: 1400px) {
+  .categoryList {
+    max-width: 1200px; /* Mențineți max-width la 1200px chiar și pe ecrane foarte mari */
+  }
+
+  .productList {
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  }
+
+  .productName {
+    font-size: 1.6rem;
+  }
+}
+
+/* Ecrane mari */
+@media (min-width: 1200px) and (max-width: 1399px) {
+  .categoryList {
+    max-width: 1000px; /* Ajustați max-width la 1000px pentru ecrane mari */
+  }
+
+  .productList {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  }
+
+  .productName {
+    font-size: 1.5rem;
+  }
+}
+
+/* Ecrane medii */
+@media (max-width: 1024px) and (min-width: 769px) {
+  .productList {
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   }
 
   .categoryList {
+    padding: 18px;
+    gap: 18px;
+  }
+}
+
+/* Ecrane mici */
+@media (max-width: 768px) {
+  .categoryList {
+    padding: 15px;
     gap: 15px;
   }
+
+  .categoryHeader {
+    padding: 12px 15px;
+  }
+
+  .categoryTitle {
+    font-size: 1.4rem;
+  }
+
+  .activeProductLabel {
+    font-size: 0.9rem;
+  }
+
+  .productCard {
+    padding: 12px;
+  }
+
+  .productName {
+    font-size: 1.3rem;
+  }
+
+  .productDetailItem {
+    font-size: 0.95rem;
+  }
+
+  .actionButton {
+    padding: 6px 10px;
+    font-size: 0.85rem;
+  }
 }
 
+/* Ecrane foarte mici */
 @media (max-width: 480px) {
-  .productSection {
-    padding: 1px;
+  .categoryList {
+    padding: 10px;
+    gap: 10px;
   }
 
-  .categoryList {
-    gap: 5px;
+  .categoryHeader {
+    flex-direction: column;
+    align-items: flex-start;
   }
+
+  .toggleIcon {
+    align-self: flex-end;
+    margin-top: 5px;
+  }
+
+  .categoryTitle {
+    font-size: 1.2rem;
+  }
+
+  .activeProductLabel {
+    font-size: 0.8rem;
+  }
+
+  .productList {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 15px;
+  }
+
+  .productName {
+    font-size: 1.2rem;
+  }
+
+  .productDetailItem {
+    font-size: 0.85rem;
+  }
+
+  .actionButton {
+    padding: 5px 8px;
+    font-size: 0.8rem;
+  }
+}
+
+/* Dark Mode Support */
+body.dark-mode {
+  --container-bg: #2c2c2c;
+  --text-color: #e0e0e0;
+  --background-color: #3a3a3a;
+  --shadow-color: rgba(0, 0, 0, 0.7);
+  --primary-color: #1e88e5;
+  --primary-color-hover: #1565c0;
+  --progress-bg: #555555;
+  --success-color: #43a047;
+  --light-blue: #1e88e5;
+  --tooltip-bg: #424242; /* Tooltip background pentru dark mode */
+  --accent-color: #ffcd02; /* Culoare accent pentru dark mode */
 }

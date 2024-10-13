@@ -1,35 +1,31 @@
 import React from "react";
 import styles from "./Controls.module.css";
-import { FaFilePdf, FaSync } from "react-icons/fa";
+import { FaSearch, FaTimes } from "react-icons/fa"; // Import clear icon
 
-const Controls = ({
-  searchTerm,
-  setSearchTerm,
-  generatePDF,
-  resetDailyData,
-}) => {
+const Controls = ({ searchTerm, setSearchTerm }) => {
+  const handleClearSearch = () => {
+    setSearchTerm("");
+  };
+
   return (
     <div className={styles.controls}>
-      <input
-        type="text"
-        placeholder="Suche nach Task-Namen..."
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-        className={styles.searchBar}
-      />
-      <div className={styles.buttonGroup}>
-        <button
-          onClick={generatePDF}
-          className={`${styles.button} ${styles.pdfButton}`}
-        >
-          <FaFilePdf /> PDF-Bericht
-        </button>
-        <button
-          onClick={resetDailyData}
-          className={`${styles.button} ${styles.resetButton}`}
-        >
-          <FaSync /> Daten Zurücksetzen
-        </button>
+      <div className={styles.searchContainer}>
+        <FaSearch className={styles.searchIcon} />
+        <input
+          type="text"
+          placeholder="Suche nach Produktnamen..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className={styles.searchBar}
+          aria-label="Produktnamen suchen"
+        />
+        {searchTerm && (
+          <FaTimes
+            className={styles.clearIcon}
+            onClick={handleClearSearch}
+            aria-label="Suche löschen"
+          />
+        )}
       </div>
     </div>
   );

@@ -1,57 +1,74 @@
 @import "../styles/variables.css";
 
+/* Dashboard Layout */
 .dashboard {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
 }
 
+/* Dunkelmodus-Stile */
 .darkMode {
-  --background-color: #1c1c1c; /* Fundal întunecat mai modern */
-  --container-bg: #2e2e2e; /* Container întunecat */
-  --text-color: #ffffff; /* Text alb pentru contrast */
-  --secondary-text: #c0c0c0; /* Text secundar deschis */
-  --header-bg: #2e2e2e; /* Fundal header întunecat */
-  --header-text: #ffffff; /* Text header alb */
-  --sidebar-bg: #2e2e2e; /* Fundal sidebar întunecat */
-  --sidebar-text: #ffffff; /* Text sidebar alb */
-  --overlay-bg: rgba(0, 0, 0, 0.8); /* Fundal overlay mai întunecat */
+  --background-color: #1c1c1c;
+  --container-bg: #2e2e2e;
+  --text-color: #ffffff;
+  --secondary-text: #c0c0c0;
+  --header-bg: #2e2e2e;
+  --header-text: #ffffff;
+  --sidebar-bg: #2e2e2e;
+  --sidebar-text: #ffffff;
+  --overlay-bg: rgba(0, 0, 0, 0.8);
+  --modal-bg: #444444;
+  --modal-text: #ffffff;
+  --modal-input-bg: #6c757d;
+  --modal-input-text: #f8f9fa;
+  --border-color: #555555; /* Beispiel für Border-Farbe */
+  --secondary-bg: #3a3a3a; /* Beispiel für sekundäre Hintergrundfarbe */
+  --primary-color: #007bff; /* Beispiel für primäre Farbe */
+  --transition-speed: 0.3s; /* Beispiel für Übergangsgeschwindigkeit */
 }
 
+/* Header und Sidebar im Dunkelmodus */
 .darkMode .header,
 .darkMode .sidebar {
   background-color: var(--header-bg);
   color: var(--header-text);
 }
 
+/* Sidebar-Navigationslinks im Dunkelmodus */
 .darkMode .sidebarNav a {
   color: var(--sidebar-text);
 }
 
+/* Hintergrund des Hauptinhalts im Dunkelmodus */
 .darkMode .mainContent {
   background-color: var(--background-color);
 }
 
+/* Container im Dunkelmodus */
 .darkMode .productSection,
 .darkMode .chartSection {
   background-color: var(--container-bg);
 }
 
+/* Kategorientitel im Dunkelmodus */
 .darkMode .categoryItem h3 {
   background-color: var(--container-bg);
 }
 
+/* Produktartikel im Dunkelmodus */
 .darkMode .productItem {
   background-color: var(--container-bg);
   border: 1px solid var(--border-color);
 }
 
+/* Hover-Effekte für Kategorientitel im Dunkelmodus */
 .darkMode .categoryItem h3:hover {
-  background-color: #444444; /* Un gri mai închis la hover */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Umbre la hover */
+  background-color: #444444;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-/* Overlay Styling */
+/* Overlay-Stil */
 .overlay {
   position: fixed;
   top: 0;
@@ -70,7 +87,7 @@
   }
 }
 
-/* Main Content Styling */
+/* Hauptinhalt-Stil */
 .mainContent {
   flex: 1;
   padding: 40px;
@@ -83,7 +100,7 @@
   }
 }
 
-/* Content Wrapper */
+/* Inhaltswrapper */
 .contentWrapper {
   display: flex;
   flex-direction: column;
@@ -96,15 +113,15 @@
   }
 }
 
-/* Dark Mode Adjustments */
+/* Modal-Stile im Dunkelmodus */
 .darkMode .modal {
-  background-color: #444444; /* Gri închis pentru modal */
-  color: #ffffff; /* Text alb pentru modal */
+  background-color: var(--modal-bg);
+  color: var(--modal-text);
 }
 
 .darkMode .modalInput {
-  background-color: #6c757d;
-  color: #f8f9fa;
+  background-color: var(--modal-input-bg);
+  color: var(--modal-input-text);
   border: 1px solid #ced4da;
 }
 
@@ -113,9 +130,9 @@
   outline: none;
 }
 
-/* Scrollbar Styling */
+/* Scrollbar-Stil */
 ::-webkit-scrollbar {
-  width: 12px; /* Lățimea scrollbar-ului */
+  width: 12px;
 }
 
 ::-webkit-scrollbar-thumb {
@@ -127,13 +144,13 @@
   background: var(--container-bg);
 }
 
-/* Responsive Adjustments */
+/* Responsive Anpassungen */
 @media (max-width: 768px) {
   .dashboard {
     flex-direction: column;
   }
 
   .contentWrapper {
-    flex-direction: column; /* Column layout for smaller screens */
+    flex-direction: column;
   }
 }
