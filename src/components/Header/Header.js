@@ -13,10 +13,11 @@ import { useNavigate } from "react-router-dom";
 import { useSnackbar } from "notistack"; // Importăm hook-ul pentru notificări
 
 const Header = ({
+  toggleSidebar,
   isDarkMode,
   toggleDarkMode,
   isSidebarOpen,
-  toggleSidebar,
+
   notifications,
 }) => {
   const [showNotifications, setShowNotifications] = useState(false);

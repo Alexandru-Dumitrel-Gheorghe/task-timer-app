@@ -1,15 +1,16 @@
 // src/components/ChartSection/ChartSection.jsx
+
 import React, { useMemo } from "react";
 import { Bar } from "react-chartjs-2";
 import { Chart, registerables } from "chart.js";
-import styles from "./ChartSection.module.css"; // Actualizați calea dacă este necesar
-import { FaChartBar } from "react-icons/fa"; // Importați iconița necesară
+import styles from "./ChartSection.module.css";
+import { FaChartBar } from "react-icons/fa";
 
-// Înregistrați componentele necesare din Chart.js
+// Registrieren der benötigten Komponenten von Chart.js
 Chart.register(...registerables);
 
 const ChartSection = ({ dailyData }) => {
-  // Funcție ajutătoare pentru formatarea timpului din secunde în HH:MM:SS
+  // Funktion zum Formatieren der Zeit in HH:MM:SS
   const formatTime = (seconds) => {
     const hrs = String(Math.floor(seconds / 3600)).padStart(2, "0");
     const mins = String(Math.floor((seconds % 3600) / 60)).padStart(2, "0");
@@ -17,9 +18,9 @@ const ChartSection = ({ dailyData }) => {
     return `${hrs}:${mins}:${secs}`;
   };
 
-  // Memoizați datele pentru a evita recalcularea la fiecare randare
+  // Memoisiere Daten, um Neuberechnungen bei jeder Render zu vermeiden
   const chartData = useMemo(() => {
-    // Gruparea datelor după numele produsului și categorie
+    // Gruppieren der Daten
     const groupedData = dailyData.reduce((acc, item) => {
       const key = `${item.productName}|${item.category}`;
       if (!acc[key]) {
@@ -51,16 +52,16 @@ const ChartSection = ({ dailyData }) => {
         {
           label: "Verbrachte Zeit (Minuten)",
           data: timeData,
-          backgroundColor: "rgba(75, 123, 236, 0.6)", // Inițială, vom schimba în CSS
-          borderColor: "#4b7bec",
+          backgroundColor: "#4b7bec",
+          borderColor: "#3867d6",
           borderWidth: 1,
           yAxisID: "y",
         },
         {
           label: "Anzahl der Arbeiten",
           data: countData,
-          backgroundColor: "rgba(252, 92, 101, 0.6)", // Inițială, vom schimba în CSS
-          borderColor: "#fc5c65",
+          backgroundColor: "#fc5c65",
+          borderColor: "#eb3b5a",
           borderWidth: 1,
           yAxisID: "y1",
         },
@@ -73,30 +74,29 @@ const ChartSection = ({ dailyData }) => {
     maintainAspectRatio: false,
     animation: {
       duration: 1000,
-      easing: "easeInOutBounce",
+      easing: "easeInOutQuad",
     },
     plugins: {
       legend: {
         position: "top",
         labels: {
-          color: "var(--text-color)",
+          color: "#333",
           font: {
             size: 14,
           },
         },
       },
       tooltip: {
-        enabled: true,
-        backgroundColor: "var(--tooltip-bg, #fff)",
-        bodyColor: "var(--text-color)",
-        titleColor: "var(--text-color)",
+        backgroundColor: "#fff",
+        bodyColor: "#333",
+        titleColor: "#333",
         borderColor: "#ccc",
         borderWidth: 1,
         titleFont: {
-          size: 16,
+          size: 14,
         },
         bodyFont: {
-          size: 14,
+          size: 12,
         },
         callbacks: {
           label: (context) => {
@@ -105,7 +105,7 @@ const ChartSection = ({ dailyData }) => {
             const productDetails = chartData.labels[context.dataIndex];
             let tooltipLabel =
               datasetIndex === 0
-                ? `Verbrachte Zeit: ${formatTime(value * 60)} (HH:MM:SS)` // Convertim în secunde pentru format
+                ? `Verbrachte Zeit: ${formatTime(value * 60)} (HH:MM:SS)`
                 : `Anzahl der Arbeiten: ${value}`;
             return `${tooltipLabel}\n${productDetails}`;
           },
@@ -114,7 +114,7 @@ const ChartSection = ({ dailyData }) => {
     },
     interaction: {
       mode: "index",
-      intersect: false, // Dezactivează intersecțiile pentru o interacțiune mai lină
+      intersect: false,
     },
     scales: {
       y: {
@@ -130,6 +130,9 @@ const ChartSection = ({ dailyData }) => {
         },
         ticks: {
           color: "#4b7bec",
+        },
+        grid: {
+          color: "rgba(75, 123, 236, 0.1)",
         },
       },
       y1: {
@@ -154,15 +157,18 @@ const ChartSection = ({ dailyData }) => {
         title: {
           display: true,
           text: "Produkte",
-          color: "var(--text-color)",
+          color: "#333",
           font: {
             size: 14,
           },
         },
         ticks: {
-          color: "var(--text-color)",
+          color: "#333",
           maxRotation: 45,
           minRotation: 45,
+        },
+        grid: {
+          color: "rgba(0, 0, 0, 0.05)",
         },
       },
     },

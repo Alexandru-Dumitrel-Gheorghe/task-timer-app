@@ -1,3 +1,5 @@
+// src/components/CategoryList/CategoryList.jsx
+
 import React, { useState, useEffect } from "react";
 import styles from "./CategoryList.module.css";
 import {
@@ -6,9 +8,9 @@ import {
   FaPlay,
   FaPause,
   FaStop,
-  FaInfoCircle,
+  FaStickyNote,
 } from "react-icons/fa";
-import NoteModal from "../NoteModal/NoteModal"; // Import the NoteModal
+import NoteModal from "../NoteModal/NoteModal";
 
 const CategoryList = ({
   categories,
@@ -18,7 +20,7 @@ const CategoryList = ({
   handlePause,
   handleStop,
   formatTime,
-  addNote, // Prop for adding notes
+  addNote,
 }) => {
   const [activeProduct, setActiveProduct] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -100,7 +102,6 @@ const CategoryList = ({
               onClick={() => handleToggleCategory(category.category)}
             >
               <h3 className={styles.categoryTitle}>
-                <FaInfoCircle className={styles.headerIcon} />
                 {category.category}
                 {activeProductInCategory && (
                   <span className={styles.activeProductLabel}>
@@ -124,26 +125,34 @@ const CategoryList = ({
                     }`}
                   >
                     <div className={styles.productInfo}>
-                      <div className={styles.productDetails}>
+                      <div className={styles.productHeader}>
                         <h4 className={styles.productName}>
                           {product.equipment}
                         </h4>
-                        <div className={styles.productDetailItem}>
-                          <FaInfoCircle className={styles.detailIcon} />
-                          Artikelnummer: {product.articleNumber}
-                        </div>
-                        <div className={styles.productDetailItem}>
-                          ⏱ Benötigte Zeit: {product.timeRequired}
-                        </div>
-                        <div className={styles.productDetailItem}>
-                          ⏳ Verbrachte Zeit:{" "}
-                          {formatTime(product.elapsedTime || 0)}
-                        </div>
                         {product.notes && (
-                          <div className={styles.productNotes}>
-                            📝 {product.notes}
+                          <FaStickyNote
+                            className={styles.noteIcon}
+                            title={product.notes}
+                          />
+                        )}
+                      </div>
+                      <div className={styles.productDetails}>
+                        {product.articleNumber && (
+                          <div className={styles.productDetailItem}>
+                            <strong>Artikelnummer:</strong>{" "}
+                            {product.articleNumber}
                           </div>
                         )}
+                        {product.timeRequired && (
+                          <div className={styles.productDetailItem}>
+                            <strong>Benötigte Zeit:</strong>{" "}
+                            {product.timeRequired}
+                          </div>
+                        )}
+                        <div className={styles.productDetailItem}>
+                          <strong>Verbrachte Zeit:</strong>{" "}
+                          {formatTime(product.elapsedTime || 0)}
+                        </div>
                       </div>
                       <div className={styles.productActions}>
                         {product.isRunning ? (

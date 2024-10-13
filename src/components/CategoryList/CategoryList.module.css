@@ -2,30 +2,26 @@
 
 @import "../../styles/variables.css";
 
-/* Container for the entire category list */
+/* Container pentru lista de categorii */
 .categoryList {
   display: flex;
   flex-direction: column;
   gap: 20px;
   padding: 20px;
-  background: var(--container-bg, #f0f0f0);
+  background: var(--container-bg);
   border-radius: var(--border-radius);
   box-shadow: 0 4px 15px var(--shadow-color);
-  max-width: 400px !important; /* Ajustat pentru a preveni supraîncărcarea pe desktop */
-  width: 100%; /* Utilizează complet spațiul disponibil */
+  width: 100%;
+  max-width: 450px;
   margin: 0 auto;
   transition: box-shadow var(--transition-speed) ease,
     transform var(--transition-speed) ease;
+  border: 1px solid var(--primary-color);
 }
 
-/* Hover effect for category list */
-.categoryList:hover {
-  box-shadow: 0 6px 20px var(--shadow-color);
-}
-
-/* Individual category card styling */
+/* Card pentru fiecare categorie */
 .categoryCard {
-  background: var(--card-bg, #ffffff);
+  background: var(--background-color);
   border-radius: 12px;
   box-shadow: 0 2px 10px var(--shadow-color);
   transition: transform var(--transition-speed) ease,
@@ -33,23 +29,20 @@
   overflow: hidden;
 }
 
-/* Hover effect for category card */
 .categoryCard:hover {
   transform: translateY(-3px);
-  box-shadow: 0 4px 15px var(--shadow-color);
+  box-shadow: 0 6px 20px var(--shadow-color);
 }
 
-/* Header for each category */
+/* Header pentru categorie */
 .categoryHeader {
-  position: relative; /* Necesar pentru pseudo-elemente */
-  background: var(--primary-color); /* Utilizare variabilă */
-  color: var(--container-bg, #ffffff);
+  background: var(--primary-color);
+  color: var(--text-color);
   padding: 15px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   cursor: pointer;
-  overflow: hidden; /* Ascunde overflow-ul de la pseudo-elemente */
   transition: background-color var(--transition-speed) ease;
 }
 
@@ -65,16 +58,10 @@
   align-items: center;
 }
 
-.headerIcon {
-  margin-right: 10px;
-  color: var(--container-bg, #ffffff);
-  font-size: 1.5rem;
-}
-
 .activeProductLabel {
   margin-left: 10px;
   font-size: 1rem;
-  color: var(--accent-color, #ffcd02);
+  color: var(--accent-color);
   font-weight: 600;
   animation: pulse 1.5s infinite;
 }
@@ -91,25 +78,20 @@
   }
 }
 
-/* Toggle icon styling */
+/* Iconița de toggle */
 .toggleIcon {
   font-size: 1.2rem;
   transition: transform var(--transition-speed) ease;
 }
 
-/* Product list container */
+/* Lista de produse */
 .productList {
   display: grid;
-  grid-template-columns: repeat(
-    auto-fill,
-    minmax(250px, 1fr)
-  ); /* Ajustat pentru flexibilitate */
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 20px;
-  padding: 15px 20px;
-  background: var(--background-color, #fafafa);
-  border-top: 1px solid var(--shadow-color, #e0e0e0);
-  border-bottom-left-radius: 12px;
-  border-bottom-right-radius: 12px;
+  padding: 20px;
+  background: var(--background-color);
+  border-top: 1px solid var(--shadow-color);
   animation: slideDown 0.3s ease-out;
 }
 
@@ -124,18 +106,17 @@
   }
 }
 
-/* Individual product card styling */
+/* Card pentru fiecare produs */
 .productCard {
-  background: var(--container-bg, #ffffff);
+  background: var(--container-bg);
   border-radius: 10px;
   box-shadow: 0 2px 8px var(--shadow-color);
   padding: 15px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   transition: transform var(--transition-speed) ease,
     box-shadow var(--transition-speed) ease;
-  border: 1px solid var(--shadow-color, #e0e0e0);
+  border: 1px solid var(--shadow-color);
 }
 
 .productCard:hover {
@@ -144,58 +125,60 @@
 }
 
 .productCard.active {
-  border-color: var(--accent-color, #ffcd02);
+  border-color: var(--accent-color);
   box-shadow: 0 4px 12px rgba(255, 205, 2, 0.2);
 }
 
+/* Informații despre produs */
 .productInfo {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
+.productHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .productName {
   font-size: 1.4rem;
   margin: 0;
-  color: var(--text-color, #333333);
+  color: var(--text-color);
   font-weight: 600;
   transition: color var(--transition-speed);
 }
 
 .productCard.active .productName {
-  color: var(--accent-color, #ffcd02);
+  color: var(--accent-color);
+}
+
+.noteIcon {
+  color: var(--accent-color);
+  font-size: 1.2rem;
+  cursor: pointer;
 }
 
 .productDetails {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 5px;
 }
 
 .productDetailItem {
-  display: flex;
-  align-items: center;
   font-size: 1rem;
-  color: var(--text-color, #777777);
+  color: var(--text-color);
 }
 
-.detailIcon {
-  margin-right: 8px;
-  color: var(--accent-color, #ffcd02);
-  font-size: 1.2rem;
+.productDetailItem strong {
+  color: var(--secondary-text);
 }
 
-.productNotes {
-  font-size: 0.9rem;
-  color: var(--text-color, #777777);
-  margin-top: 5px;
-}
-
-/* Action buttons */
 .productActions {
   display: flex;
   gap: 10px;
-  margin-top: 10px;
+  margin-top: auto;
 }
 
 .actionButton {
@@ -209,8 +192,8 @@
   cursor: pointer;
   transition: background-color var(--transition-speed) ease, transform 0.2s ease,
     box-shadow var(--transition-speed) ease;
-  color: var(--container-bg, #ffffff);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  color: #ffffff;
+  font-weight: 600;
 }
 
 .startButton {
@@ -220,7 +203,7 @@
 .startButton:hover {
   background: linear-gradient(45deg, #218838, #1e7e34);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(40, 167, 69, 0.2);
+  box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
 }
 
 .pauseButton {
@@ -230,7 +213,7 @@
 .pauseButton:hover {
   background: linear-gradient(45deg, #e0a800, #d39e00);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(255, 193, 7, 0.2);
+  box-shadow: 0 4px 12px rgba(255, 193, 7, 0.3);
 }
 
 .stopButton {
@@ -240,58 +223,15 @@
 .stopButton:hover {
   background: linear-gradient(45deg, #c82333, #bd2130);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(220, 53, 69, 0.2);
+  box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
 }
 
-/* No products message */
-.noProducts {
-  text-align: center;
-  color: var(--text-color, #777777);
-  font-size: 1rem;
-  padding: 15px 0;
-}
-
-/* Responsive design adjustments */
-
-/* Ecrane foarte mari */
-@media (min-width: 1400px) {
-  .categoryList {
-    max-width: 1200px; /* Mențineți max-width la 1200px chiar și pe ecrane foarte mari */
-  }
-
-  .productList {
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  }
-
-  .productName {
-    font-size: 1.6rem;
-  }
-}
-
-/* Ecrane mari */
-@media (min-width: 1200px) and (max-width: 1399px) {
-  .categoryList {
-    max-width: 1000px; /* Ajustați max-width la 1000px pentru ecrane mari */
-  }
-
-  .productList {
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  }
-
-  .productName {
-    font-size: 1.5rem;
-  }
-}
+/* Responsive Design */
 
 /* Ecrane medii */
-@media (max-width: 1024px) and (min-width: 769px) {
+@media (max-width: 1024px) {
   .productList {
     grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  }
-
-  .categoryList {
-    padding: 18px;
-    gap: 18px;
   }
 }
 
@@ -304,7 +244,6 @@
 
   .categoryHeader {
     padding: 12px 15px;
-    height: 70px;
   }
 
   .categoryTitle {
@@ -343,7 +282,6 @@
   .categoryHeader {
     flex-direction: column;
     align-items: flex-start;
-    height: 70px;
   }
 
   .toggleIcon {
@@ -378,7 +316,7 @@
   }
 }
 
-/* Dark Mode Support */
+/* Suport pentru Modul Întunecat */
 body.dark-mode {
   --container-bg: #2c2c2c;
   --text-color: #e0e0e0;
@@ -386,9 +324,5 @@ body.dark-mode {
   --shadow-color: rgba(0, 0, 0, 0.7);
   --primary-color: #1e88e5;
   --primary-color-hover: #1565c0;
-  --progress-bg: #555555;
-  --success-color: #43a047;
-  --light-blue: #1e88e5;
-  --tooltip-bg: #424242; /* Tooltip background pentru dark mode */
-  --accent-color: #ffcd02; /* Culoare accent pentru dark mode */
+  --accent-color: #ffcd02;
 }

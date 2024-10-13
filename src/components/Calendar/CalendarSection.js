@@ -1,5 +1,3 @@
-// src/components/CalendarSection/CalendarSection.jsx
-
 import React from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
@@ -23,9 +21,9 @@ import {
   FaArrowRight,
 } from "react-icons/fa";
 
-const DAILY_TARGET_HOURS = 8; // 8 Ore pe zi
-const WEEKLY_TARGET_HOURS = 40; // 40 Ore pe săptămână
-const MONTHLY_TARGET_HOURS = 160; // 160 Ore pe lună
+const DAILY_TARGET_HOURS = 8; // 8 Stunden pro Tag
+const WEEKLY_TARGET_HOURS = 40; // 40 Stunden pro Woche
+const MONTHLY_TARGET_HOURS = 160; // 160 Stunden pro Monat
 
 const CalendarSection = ({
   selectedDate,
@@ -33,10 +31,10 @@ const CalendarSection = ({
   dailyData,
   runningData,
 }) => {
-  // Formatați data la YYYY-MM-DD
+  // Format date to YYYY-MM-DD
   const formatDate = (date) => format(date, "yyyy-MM-dd");
 
-  // Obțineți evenimentele pentru data selectată
+  // Get events for the selected date
   const getEventsForDate = (date) => {
     const formattedDate = formatDate(date);
     const stoppedEvents = dailyData.filter((item) =>
@@ -50,7 +48,7 @@ const CalendarSection = ({
     return [...stoppedEvents, ...runningEvents];
   };
 
-  // Obțineți evenimentele pentru săptămână (începând de la luni)
+  // Get events for the week (starting from Monday)
   const getEventsForWeek = (date) => {
     const startWeek = startOfWeek(date, { weekStartsOn: 1 });
     const stoppedEvents = dailyData.filter((item) =>
@@ -62,7 +60,7 @@ const CalendarSection = ({
     return [...stoppedEvents, ...runningEvents];
   };
 
-  // Obțineți evenimentele pentru luna curentă
+  // Get events for the current month
   const getEventsForMonth = (date) => {
     const startMonth = startOfMonth(date);
     const stoppedEvents = dailyData.filter((item) =>
@@ -74,11 +72,11 @@ const CalendarSection = ({
     return [...stoppedEvents, ...runningEvents];
   };
 
-  // Calculați totalul orelor lucrate pentru setul de date specific
+  // Calculate total hours worked for specific data set
   const getTotalHours = (data) => {
-    // Verificăm dacă elapsedTime este în milisecunde sau secunde
-    const isMilliseconds = data.some((event) => event.elapsedTime > 100000); // Presupunem că milisecundele vor fi mai mari de 100,000
-    const conversionFactor = isMilliseconds ? 3600000 : 3600; // 3,600,000 pentru ms, 3,600 pentru s
+    // Check if elapsedTime is in milliseconds or seconds
+    const isMilliseconds = data.some((event) => event.elapsedTime > 100000);
+    const conversionFactor = isMilliseconds ? 3600000 : 3600;
 
     const totalSecondsOrMs = data.reduce(
       (total, event) => total + (event.elapsedTime || 0),
@@ -89,42 +87,33 @@ const CalendarSection = ({
     return totalHours;
   };
 
-  // Obțineți procentul de țintă zilnică completată pentru data selectată
+  // Get daily target percentage for the selected date
   const getDailyPercentage = () => {
     const eventsForDay = getEventsForDate(selectedDate);
     const totalHours = getTotalHours(eventsForDay);
-    const percentage = Math.min(
-      (totalHours / DAILY_TARGET_HOURS) * 100,
-      100
-    ).toFixed(2);
+    const percentage = Math.min((totalHours / DAILY_TARGET_HOURS) * 100, 100);
     return percentage;
   };
 
-  // Obțineți procentul de țintă săptămânală completată pentru săptămâna selectată
+  // Get weekly target percentage for the selected week
   const getWeeklyPercentage = () => {
     const eventsForWeek = getEventsForWeek(selectedDate);
     const totalHours = getTotalHours(eventsForWeek);
-    const percentage = Math.min(
-      (totalHours / WEEKLY_TARGET_HOURS) * 100,
-      100
-    ).toFixed(2);
+    const percentage = Math.min((totalHours / WEEKLY_TARGET_HOURS) * 100, 100);
     return percentage;
   };
 
-  // Obțineți procentul de țintă lunară completată pentru luna selectată
+  // Get monthly target percentage for the selected month
   const getMonthlyPercentage = () => {
     const eventsForMonth = getEventsForMonth(selectedDate);
     const totalHours = getTotalHours(eventsForMonth);
-    const percentage = Math.min(
-      (totalHours / MONTHLY_TARGET_HOURS) * 100,
-      100
-    ).toFixed(2);
+    const percentage = Math.min((totalHours / MONTHLY_TARGET_HOURS) * 100, 100);
     return percentage;
   };
 
-  // Funcție personalizată pentru a formata denumirile scurte ale zilelor în germană
+  // Custom function to format short weekday names in German
   const formatShortWeekday = (locale, date) => {
-    return format(date, "EEE", { locale }); // 'EEE' returnează denumiri scurte ale zilelor, ex. 'Mo', 'Di', etc.
+    return format(date, "EEE", { locale });
   };
 
   return (
@@ -139,15 +128,57 @@ const CalendarSection = ({
           value={selectedDate}
           locale={de}
           className={styles.customCalendar}
-          nextLabel={<FaChevronRight />} // Ersetzen von Text durch Icon
-          prevLabel={<FaChevronLeft />} // Ersetzen von Text durch Icon
-          next2Label={<FaArrowRight />} // Ersetzen von Text durch Icon
-          prev2Label={<FaArrowLeft />} // Ersetzen von Text durch Icon
+          nextLabel={<FaChevronRight />}
+          prevLabel={<FaChevronLeft />}
+          next2Label={<FaArrowRight />}
+          prev2Label={<FaArrowLeft />}
           formatShortWeekday={(locale, date) =>
             formatShortWeekday(locale, date)
           }
         />
       </div>
+
+      {/* Display Usage Overview First */}
+      <div className={styles.usageOverview}>
+        <h3>
+          <FaClock className={styles.usageIcon} />
+          Auslastung
+        </h3>
+        <div className={styles.progressBars}>
+          <div className={styles.progressItem}>
+            <span>Tägliche Zielerreichung:</span>
+            <div className={styles.progressBar}>
+              <div
+                className={styles.progressFill}
+                style={{ width: `${getDailyPercentage()}%` }}
+                data-label={`${getDailyPercentage().toFixed(2)}%`}
+              ></div>
+            </div>
+          </div>
+          <div className={styles.progressItem}>
+            <span>Wöchentliche Zielerreichung:</span>
+            <div className={styles.progressBar}>
+              <div
+                className={styles.progressFill}
+                style={{ width: `${getWeeklyPercentage()}%` }}
+                data-label={`${getWeeklyPercentage().toFixed(2)}%`}
+              ></div>
+            </div>
+          </div>
+          <div className={styles.progressItem}>
+            <span>Monatliche Zielerreichung:</span>
+            <div className={styles.progressBar}>
+              <div
+                className={styles.progressFill}
+                style={{ width: `${getMonthlyPercentage()}%` }}
+                data-label={`${getMonthlyPercentage().toFixed(2)}%`}
+              ></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Arbeitszeiten Section */}
       <div className={styles.eventList}>
         <h3>
           <FaClock className={styles.eventIcon} />
@@ -189,49 +220,11 @@ const CalendarSection = ({
           </p>
         )}
       </div>
-      <div className={styles.usageOverview}>
-        <h3>
-          <FaClock className={styles.usageIcon} />
-          Prozentuale Auslastung
-        </h3>
-        <div className={styles.progressBars}>
-          <div className={styles.progressItem}>
-            <span>Tägliche Zielerreichung:</span>
-            <div className={styles.progressBar}>
-              <div
-                className={styles.progressFill}
-                style={{ width: `${getDailyPercentage()}%`, minWidth: "15%" }}
-                data-label={`${getDailyPercentage()}%`}
-              ></div>
-            </div>
-          </div>
-          <div className={styles.progressItem}>
-            <span>Wöchentliche Zielerreichung:</span>
-            <div className={styles.progressBar}>
-              <div
-                className={styles.progressFill}
-                style={{ width: `${getWeeklyPercentage()}%`, minWidth: "15%" }}
-                data-label={`${getWeeklyPercentage()}%`}
-              ></div>
-            </div>
-          </div>
-          <div className={styles.progressItem}>
-            <span>Monatliche Zielerreichung:</span>
-            <div className={styles.progressBar}>
-              <div
-                className={styles.progressFill}
-                style={{ width: `${getMonthlyPercentage()}%`, minWidth: "15%" }}
-                data-label={`${getMonthlyPercentage()}%`}
-              ></div>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   );
 };
 
-// Funcție ajutătoare pentru formatarea timpului din secunde sau milisecunde în HH:MM:SS
+// Helper function to format time from seconds or milliseconds to HH:MM:SS
 const formatTime = (time) => {
   const isMilliseconds = time > 100000;
   const totalSeconds = isMilliseconds ? Math.floor(time / 1000) : time;

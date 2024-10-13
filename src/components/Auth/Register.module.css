@@ -5,153 +5,132 @@
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background-color: #3b4351;
+  background: linear-gradient(135deg, #007acc, #00c6ff);
   padding: 20px;
-  overflow: hidden;
+  position: relative;
 }
 
-.tiltWrapper {
-  width: 100%;
-  max-width: 400px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.formWrapper {
-  background-color: rgba(255, 255, 255, 0.85); /* Semi-transparent background */
+.registerBox {
+  background-color: rgba(255, 255, 255, 0.95);
   padding: 2.5rem;
-  border-radius: 10px;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
   max-width: 400px;
   width: 100%;
   text-align: center;
-  position: relative;
-  z-index: 1;
-  animation: formEnter 1s ease forwards;
-}
-
-@keyframes formEnter {
-  0% {
-    transform: scale(0.8);
-    opacity: 0;
-  }
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-
-h2 {
-  margin-bottom: 1.5rem;
-  font-size: 1.8rem;
-  color: #333;
-  animation: fadeIn 1.2s ease;
+  animation: fadeIn 0.8s ease-in-out;
+  backdrop-filter: blur(10px);
 }
 
 @keyframes fadeIn {
-  0% {
+  from {
     opacity: 0;
+    transform: translateY(-20px);
   }
-  100% {
+  to {
     opacity: 1;
+    transform: translateY(0);
   }
 }
 
-input {
+.title {
+  font-size: 2.2rem;
+  margin-bottom: 0.5rem;
+  color: #007acc;
+  font-weight: 700;
+}
+
+.subtitle {
+  font-size: 1rem;
+  margin-bottom: 2rem;
+  color: #555;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+.inputWrapper {
+  position: relative;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+}
+
+.input {
   width: 100%;
-  padding: 12px;
+  padding: 12px 40px 12px 40px; /* Adjust padding for the icon */
   margin: 10px 0;
-  border: 1px solid #ddd;
-  border-radius: 5px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
   font-size: 1rem;
   transition: all 0.3s ease;
+  background-color: rgba(255, 255, 255, 0.8);
 }
 
-input:focus {
-  border-color: #7bdc4c;
-  box-shadow: 0 0 10px rgba(123, 220, 76, 0.2);
+.input:focus {
+  border-color: #007acc;
+  box-shadow: 0 0 10px rgba(0, 122, 204, 0.2);
+  background-color: #fff;
 }
 
-button {
-  width: 100%;
-  padding: 12px;
-  background-color: #7bdc4c;
+.icon {
+  position: absolute;
+  left: 15px; /* Correctly position the icon */
+  top: 50%;
+  transform: translateY(-50%);
+  color: #007acc;
+  font-size: 1.2rem;
+}
+
+.button {
+  padding: 15px;
+  background: linear-gradient(135deg, #007acc, #00c6ff);
   color: white;
   border: none;
-  border-radius: 5px;
-  font-size: 1rem;
+  border-radius: 8px;
+  font-size: 1.2rem;
+  font-weight: 600;
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.2s;
 }
 
-button:hover {
-  background-color: #69c43e;
-  transform: translateY(-3px);
-  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+.button:hover {
+  background-color: #005fa3;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 122, 204, 0.2);
 }
 
-button:active {
-  transform: translateY(0);
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
-}
-
-p {
+.switchText {
   margin-top: 1rem;
   color: #666;
-  animation: fadeInUp 1.5s ease;
+  font-size: 0.9rem;
 }
 
-@keyframes fadeInUp {
-  0% {
-    transform: translateY(20px);
-    opacity: 0;
-  }
-  100% {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
-p a {
-  color: #7bdc4c;
+.link {
+  color: #007acc;
   text-decoration: none;
-  transition: color 0.3s ease;
+  font-weight: 600;
 }
 
-p a:hover {
+.link:hover {
+  color: #005fa3;
   text-decoration: underline;
-  color: #69c43e;
 }
 
 /* Responsive Design */
-
-@media (min-width: 768px) {
-  .formWrapper {
-    padding: 3rem;
-    max-width: 500px;
-  }
-
-  .tiltWrapper {
-    max-width: 500px;
-  }
-}
-
 @media (max-width: 480px) {
-  .formWrapper {
-    padding: 1.5rem;
-    max-width: 320px;
+  .registerBox {
+    padding: 2rem;
   }
 
-  h2 {
-    font-size: 1.5rem;
+  .title {
+    font-size: 1.8rem;
   }
 
-  input {
-    font-size: 0.9rem;
-  }
-
-  button {
+  .input,
+  .button {
     font-size: 0.9rem;
   }
 }

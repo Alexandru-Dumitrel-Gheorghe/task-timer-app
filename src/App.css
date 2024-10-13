@@ -1,31 +1,36 @@
-/* App.css */
-
-/* Variabile CSS pentru teme */
-:root {
-  --primary-color: #4a90e2;
-  --primary-hover: #357ab8;
-  --secondary-color: #50e3c2;
-  --secondary-hover: #3bc9ae;
-  --danger-color: #e74c3c;
-  --danger-hover: #c0392b;
-  --text-color: #333;
-  --muted-text: #777;
-  --container-bg: #fff;
-  --border-color: #ddd;
-  --shadow-color: rgba(0, 0, 0, 0.1);
-  --light-blue: #f0f8ff;
-  --font-size-small: 0.875rem;
-  --font-size-medium: 1rem;
-  --font-size-large: 1.25rem;
-  --border-radius: 8px;
-  --transition-speed: 0.3s;
-}
-
 /* Reset CSS */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+
+/* Prevent zooming by controlling the width and font sizes */
+input,
+button,
+select,
+textarea {
+  font-size: 16px; /* Ensures that touch targets remain large enough */
+  touch-action: manipulation; /* Prevent zooming on certain elements */
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  body {
+    font-size: var(--font-size-medium); /* Adjusted for smaller screens */
+  }
+  .container {
+    padding: 10px; /* Adjust padding for smaller screens */
+  }
+
+  /* Adjust other elements accordingly to keep layout intact */
+  .inputWrapper {
+    font-size: 1rem;
+  }
+
+  .iconButton {
+    font-size: 1.2em;
+  }
 }
 
 body {

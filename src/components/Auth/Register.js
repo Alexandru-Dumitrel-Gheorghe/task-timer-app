@@ -1,20 +1,18 @@
-// src/components/Auth/Register.jsx
-
 import React, { useState, useContext } from "react";
-import axiosInstance from "../../axiosConfig"; // Verwenden der konfigurierten Axios-Instanz
+import axiosInstance from "../../axiosConfig";
 import { useNavigate, Link } from "react-router-dom";
+import { FaUser, FaLock } from "react-icons/fa"; // Import Icons
 import styles from "./Register.module.css";
-import { AuthContext } from "../../context/AuthContext"; // Importiere AuthContext
-import { useSnackbar } from "notistack"; // Importiere useSnackbar aus notistack
-import Tilt from "react-parallax-tilt"; // Import Tilt
+import { AuthContext } from "../../context/AuthContext";
+import { useSnackbar } from "notistack";
 
 const Register = () => {
-  const { login } = useContext(AuthContext); // Zugriff auf die Login-Funktion aus AuthContext
+  const { login } = useContext(AuthContext);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false); // Ladezustand, um Mehrfachübermittlungen zu verhindern
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const { enqueueSnackbar } = useSnackbar(); // Verwendung des Snackbar-Hooks
+  const { enqueueSnackbar } = useSnackbar();
 
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -27,13 +25,12 @@ const Register = () => {
 
       const { token, user } = response.data;
 
-      // Wenn Token und Benutzer zurückgegeben werden, melde den Benutzer automatisch an
       if (token && user) {
-        await login(token); // Verwende die Login-Funktion aus AuthContext
+        await login(token);
         localStorage.setItem("user", JSON.stringify(user));
         enqueueSnackbar("Erfolgreich registriert und angemeldet!", {
           variant: "success",
-        }); // Erfolgsmeldung
+        });
         navigate("/products");
       } else {
         enqueueSnackbar(
@@ -49,47 +46,54 @@ const Register = () => {
         "Registrierung fehlgeschlagen: " +
           (error.response?.data?.message || error.message),
         { variant: "error" }
-      ); // Fehlermeldung
+      );
     }
   };
 
   return (
     <div className={styles.container}>
-      <Tilt
-        glareEnable={true}
-        glareMaxOpacity={0.2}
-        scale={1.05}
-        transitionSpeed={2500}
-        className={styles.tiltWrapper}
-      >
-        <div className={styles.formWrapper}>
-          <h2>Registrieren</h2>
-          <form onSubmit={handleRegister}>
+      <div className={styles.registerBox}>
+        <h2 className={styles.title}>Konto Erstellen</h2>
+        <p className={styles.subtitle}>
+          Füllen Sie die Felder aus, um Ihr Konto zu erstellen.
+        </p>
+        <form onSubmit={handleRegister} className={styles.form}>
+          <div className={styles.inputWrapper}>
+            <FaUser className={styles.icon} />
             <input
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               placeholder="Benutzername"
               required
-              disabled={loading} // Deaktiviere Eingaben beim Laden
+              disabled={loading}
+              className={styles.input}
             />
+          </div>
+          <div className={styles.inputWrapper}>
+            <FaLock className={styles.icon} />
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Passwort"
               required
-              disabled={loading} // Deaktiviere Eingaben beim Laden
+              disabled={loading}
+              className={styles.input}
             />
-            <button type="submit" disabled={loading}>
-              {loading ? "Lädt..." : "Registrieren"}
-            </button>
-          </form>
-          <p>
-            Bereits ein Konto? <Link to="/login">Hier anmelden</Link>.
-          </p>
-        </div>
-      </Tilt>
+          </div>
+          <button type="submit" disabled={loading} className={styles.button}>
+            {loading ? "Lädt..." : "Registrieren"}
+          </button>
+        </form>
+        <p className={styles.switchText}>
+          Bereits ein Konto?{" "}
+          <Link to="/login" className={styles.link}>
+            Hier anmelden
+          </Link>
+          .
+        </p>
+      </div>
     </div>
   );
 };
