@@ -1,4 +1,3 @@
-// src/components/CategoryList/CategoryList.jsx
 import React, { useState, useEffect } from "react";
 import styles from "./CategoryList.module.css";
 import {
@@ -9,6 +8,7 @@ import {
   FaStop,
   FaInfoCircle,
 } from "react-icons/fa";
+import NoteModal from "../NoteModal/NoteModal"; // Import the NoteModal
 
 const CategoryList = ({
   categories,
@@ -18,16 +18,19 @@ const CategoryList = ({
   handlePause,
   handleStop,
   formatTime,
+  addNote, // Prop for adding notes
 }) => {
   const [activeProduct, setActiveProduct] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentProductId, setCurrentProductId] = useState("");
 
-  // Încărcarea activeProduct din localStorage la montare
+  // Load activeProduct from localStorage on mount
   useEffect(() => {
     const storedActiveProduct = localStorage.getItem("activeProduct");
     if (storedActiveProduct) {
       try {
         const parsedProduct = JSON.parse(storedActiveProduct);
-        // Verificăm dacă produsul încă există în categorii
+        // Check if the product still exists in categories
         const productExists = categories.some((category) =>
           category.products.some(
             (product) => product._id === parsedProduct.productId
@@ -39,16 +42,13 @@ const CategoryList = ({
           localStorage.removeItem("activeProduct");
         }
       } catch (error) {
-        console.error(
-          "Eroare la parsearea activeProduct din localStorage:",
-          error
-        );
+        console.error("Error parsing activeProduct from localStorage:", error);
         localStorage.removeItem("activeProduct");
       }
     }
   }, [categories]);
 
-  // Salvarea activeProduct în localStorage atunci când se schimbă
+  // Save activeProduct to localStorage when it changes
   useEffect(() => {
     if (activeProduct) {
       localStorage.setItem("activeProduct", JSON.stringify(activeProduct));
@@ -68,8 +68,18 @@ const CategoryList = ({
   };
 
   const handleStopClick = (category, productId) => {
+    setCurrentProductId(productId);
+    setIsModalOpen(true); // Open the modal when stopping
     handleStop(category, productId);
     setActiveProduct(null);
+  };
+
+  const handleSubmitNote = (note) => {
+    addNote({
+      productId: currentProductId,
+      note,
+    });
+    setIsModalOpen(false); // Close the modal after submission
   };
 
   return (
@@ -174,6 +184,13 @@ const CategoryList = ({
           </div>
         );
       })}
+
+      {/* Include the NoteModal for adding notes */}
+      <NoteModal
+        isOpen={isModalOpen}
+        onRequestClose={() => setIsModalOpen(false)}
+        onSubmit={handleSubmitNote}
+      />
     </div>
   );
 };

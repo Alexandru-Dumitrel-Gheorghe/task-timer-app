@@ -42,7 +42,7 @@ const Header = ({
     <header className={styles.header}>
       <div className={styles.headerContent}>
         <div className={styles.logo}>
-          <h2>Produkt Timer</h2>
+          <h2>Arbeitszeit</h2>
         </div>
         <div className={styles.headerActions}>
           <button

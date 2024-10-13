@@ -193,6 +193,19 @@ const ProductList = () => {
     }
   };
 
+  const addNote = ({ productId, note }) => {
+    const updatedData = dailyData.map((item) => {
+      if (item.productId === productId) {
+        return { ...item, notes: note };
+      }
+      return item;
+    });
+
+    setDailyData(updatedData);
+    localStorage.setItem(`dailyData_${user._id}`, JSON.stringify(updatedData));
+    enqueueSnackbar("Notiz hinzugefügt!", { variant: "success" });
+  };
+
   const generatePDF = () => {
     if (dailyData.length === 0) {
       enqueueSnackbar(
@@ -361,6 +374,7 @@ const ProductList = () => {
             handlePause={handlePause}
             handleStop={handleStop}
             formatTime={formatTime}
+            addNote={addNote} // Pass addNote to CategoryList
           />
 
           {/* Transmiteți datele filtrate și runningData către ChartSection */}
@@ -372,6 +386,7 @@ const ProductList = () => {
             setSelectedDate={setSelectedDate}
             dailyData={dailyData}
             runningData={runningData}
+            addNote={addNote} // Pass addNote to CalendarSection
           />
         </div>
       </main>
