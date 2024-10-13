@@ -61,7 +61,7 @@
 
 .input {
   width: 100%;
-  padding: 12px 40px 12px 40px; /* Adjust padding for the icon */
+  padding: 12px 40px; /* Adjust padding for the icon */
   margin: 10px 0;
   border: 2px solid #ddd;
   border-radius: 8px;
@@ -120,7 +120,7 @@
   text-decoration: underline;
 }
 
-/* Responsive Design */
+/* Design Responsiv */
 @media (max-width: 480px) {
   .registerBox {
     padding: 2rem;
@@ -130,8 +130,9 @@
     font-size: 1.8rem;
   }
 
-  .input,
+  /* Am eliminat reducerea dimensiunii fontului pentru .input */
+  /* Menținem font-size la 1rem pentru a evita zoom-ul */
   .button {
-    font-size: 0.9rem;
+    font-size: 1rem;
   }
 }

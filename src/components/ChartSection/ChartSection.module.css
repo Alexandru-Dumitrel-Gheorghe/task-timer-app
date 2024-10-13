@@ -1,19 +1,19 @@
-/* src/components/ChartSection/ChartSection.module.css */
-
 @import "../../styles/variables.css";
 
 /* Container pentru secțiunea graficului */
 .chartContainer {
   display: flex;
   flex-direction: column;
-  padding: 25px;
+  padding: 2rem;
   background: var(--container-bg);
   border-radius: var(--border-radius);
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   max-height: 70vh;
   border: 1px solid var(--primary-color);
-  max-width: 650px;
+  max-width: 100%;
+  width: 100%;
+  margin: 0 auto;
 }
 
 .chartContainer:hover {
@@ -24,18 +24,18 @@
 .chartHeader {
   display: flex;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 1.5rem;
 }
 
 .chartIcon {
-  margin-right: 12px;
+  margin-right: 0.75rem;
   font-size: 2rem;
   color: var(--primary-color);
 }
 
 .chartTitle {
   margin: 0;
-  font-size: 1.8em;
+  font-size: 2rem;
   color: var(--text-color);
   font-weight: 600;
   font-family: "Roboto", sans-serif;
@@ -49,26 +49,44 @@
 
 .chartWrapper canvas {
   width: 100% !important;
-  height: 100% !important;
+  height: auto !important;
   border-radius: var(--border-radius);
 }
 
 /* Design Responsiv */
-@media (max-width: 768px) {
+@media (max-width: 1200px) {
   .chartContainer {
-    padding: 20px;
+    padding: 1.5rem;
   }
   .chartTitle {
-    font-size: 1.5em;
+    font-size: 1.8rem;
+  }
+}
+
+@media (max-width: 992px) {
+  .chartContainer {
+    padding: 1.5rem;
+  }
+  .chartTitle {
+    font-size: 1.6rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .chartContainer {
+    padding: 1rem;
+  }
+  .chartTitle {
+    font-size: 1.4rem;
   }
 }
 
 @media (max-width: 576px) {
   .chartContainer {
-    padding: 15px;
+    padding: 0.75rem;
   }
   .chartTitle {
-    font-size: 1.2em;
+    font-size: 1.2rem;
   }
 }
 

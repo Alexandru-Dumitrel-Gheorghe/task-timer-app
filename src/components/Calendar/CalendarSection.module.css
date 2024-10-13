@@ -1,10 +1,10 @@
 @import "../../styles/variables.css";
 
-/* Container for the calendar section */
+/* Container pentru secțiunea de calendar */
 .calendarContainer {
-  margin: 0px auto;
-  padding: 30px 40px;
-  max-width: 600px;
+  margin: 0 auto;
+  padding: 2rem;
+  max-width: 100%;
   background-color: var(--container-bg);
   border-radius: var(--border-radius);
   box-shadow: 0 10px 25px var(--shadow-color);
@@ -25,13 +25,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 40px;
+  margin-bottom: 2rem;
   position: relative;
   z-index: 1;
 }
 
 .headerIcon {
-  margin-right: 10px;
+  margin-right: 0.5rem;
   font-size: 2rem;
   color: var(--primary-color);
 }
@@ -45,7 +45,7 @@ h2 {
 
 .calendarWrapper {
   width: 100%;
-  margin-bottom: 30px;
+  margin-bottom: 2rem;
   z-index: 1;
   position: relative;
 }
@@ -54,7 +54,7 @@ h2 {
   width: 100%;
   border: none;
   border-radius: var(--border-radius);
-  padding: 15px;
+  padding: 1rem;
   background: var(--background-color);
   box-shadow: 0 5px 15px var(--shadow-color);
   position: relative;
@@ -64,7 +64,7 @@ h2 {
 }
 
 .eventList {
-  margin-top: 4rem;
+  margin-top: 2rem;
   z-index: 1;
   position: relative;
 }
@@ -74,40 +74,38 @@ h2 {
   align-items: center;
   justify-content: center;
   font-size: 1.6rem;
-  margin-bottom: 20px;
+  margin-bottom: 1.5rem;
   font-family: "Roboto", sans-serif;
   color: var(--text-color);
 }
 
 .eventIcon {
-  margin-right: 8px;
+  margin-right: 0.5rem;
   color: var(--primary-color);
   font-size: 1.5rem;
 }
 
 .eventItem {
   background: var(--container-bg);
-  padding: 20px;
-  margin: 15px 0;
+  padding: 1.5rem;
+  margin: 1rem 0;
   border-radius: var(--border-radius);
   box-shadow: 0 4px 12px var(--shadow-color);
   transition: transform var(--transition-speed),
     box-shadow var(--transition-speed), background-color var(--transition-speed);
   display: flex;
   flex-direction: column;
-  margin-top: 2rem;
 }
 
 .eventItem:hover {
   transform: translateY(-5px);
   box-shadow: 0 8px 25px var(--shadow-color);
-  background: var(--primary-hover-bg);
 }
 
 .eventHeader {
   display: flex;
   align-items: center;
-  margin-bottom: 10px;
+  margin-bottom: 0.5rem;
 }
 
 .eventHeader strong {
@@ -116,7 +114,7 @@ h2 {
 }
 
 .detailIcon {
-  margin-right: 8px;
+  margin-right: 0.5rem;
   color: var(--secondary-text);
   font-size: 1rem;
 }
@@ -125,13 +123,13 @@ h2 {
   text-align: center;
   color: var(--secondary-text);
   font-size: 1rem;
-  padding: 15px 0;
+  padding: 1rem 0;
   font-style: italic;
 }
 
 .usageOverview {
-  margin-top: 40px;
-  padding: 25px 20px;
+  margin-top: 2rem;
+  padding: 1.5rem;
   background: var(--background-color);
   border-radius: var(--border-radius);
   box-shadow: 0 4px 12px var(--shadow-color);
@@ -144,13 +142,13 @@ h2 {
   align-items: center;
   justify-content: center;
   font-size: 1.6rem;
-  margin-bottom: 20px;
+  margin-bottom: 1.5rem;
   font-family: "Roboto", sans-serif;
   color: var(--text-color);
 }
 
 .usageIcon {
-  margin-right: 8px;
+  margin-right: 0.5rem;
   font-size: 1.5rem;
   color: var(--primary-color);
 }
@@ -158,7 +156,7 @@ h2 {
 .progressBars {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 1.5rem;
 }
 
 .progressItem {
@@ -170,16 +168,16 @@ h2 {
 
 .progressItem span {
   font-weight: 500;
-  margin-bottom: 10px;
+  margin-bottom: 0.5rem;
   color: var(--text-color);
 }
 
 .progressBar {
   width: 100%;
   max-width: 500px;
-  height: 25px;
+  height: 1rem;
   background-color: #e0e0e0;
-  border-radius: 15px;
+  border-radius: 0.75rem;
   overflow: hidden;
   position: relative;
   box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
@@ -190,14 +188,14 @@ h2 {
   background: linear-gradient(90deg, #ff8a00, #e52e71);
   width: 0;
   transition: width 1s ease-in-out;
-  border-radius: 15px 0 0 15px;
+  border-radius: 0.75rem 0 0 0.75rem;
   position: relative;
 }
 
 .progressFill::after {
   content: attr(data-label);
   position: absolute;
-  left: 50px;
+  left: 1rem;
   top: 50%;
   transform: translateY(-50%);
   color: hsla(170, 50%, 45%, 1);
@@ -218,8 +216,7 @@ h2 {
 
 @media (max-width: 480px) {
   .calendarContainer {
-    max-width: 100%;
-    padding: 20px;
+    padding: 1.5rem;
   }
 
   .headerIcon {
@@ -240,11 +237,11 @@ h2 {
 
   .progressFill::after {
     font-size: 0.8rem;
-    left: 1px;
+    left: 0.5rem;
   }
 }
 
-/* Dark Mode Support */
+/* Suport pentru Modul Întunecat */
 body.dark-mode {
   --container-bg: #2c2c2c;
   --text-color: #e0e0e0;
