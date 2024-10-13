@@ -223,7 +223,7 @@ h2 {
 
 @media (max-width: 480px) {
   .calendarContainer {
-    max-width: 90%;
+    max-width: 100%;
     padding: 20px;
   }
 
