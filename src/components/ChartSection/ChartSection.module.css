@@ -9,11 +9,12 @@
   border-radius: var(--border-radius);
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  max-height: 70vh;
+  max-height: 90vh; /* Am mărit valoarea pentru a permite o înălțime mai mare */
   border: 1px solid var(--primary-color);
   max-width: 100%;
   width: 100%;
   margin: 0 auto;
+  overflow-x: auto; /* Permite scroll orizontal dacă este necesar */
 }
 
 .chartContainer:hover {
@@ -39,17 +40,18 @@
   color: var(--text-color);
   font-weight: 600;
   font-family: "Roboto", sans-serif;
+  text-align: center; /* Centrează titlul pe ecrane mici */
 }
 
 .chartWrapper {
   flex: 1;
   position: relative;
-  height: 100%;
+  height: 600px; /* Setează o înălțime mai mare pentru grafic */
 }
 
 .chartWrapper canvas {
   width: 100% !important;
-  height: auto !important;
+  height: 100% !important; /* Asigură-te că canvasul ocupă toată înălțimea disponibilă */
   border-radius: var(--border-radius);
 }
 
@@ -61,6 +63,9 @@
   .chartTitle {
     font-size: 1.8rem;
   }
+  .chartWrapper {
+    height: 550px; /* Mărește înălțimea pentru ecrane medii */
+  }
 }
 
 @media (max-width: 992px) {
@@ -69,6 +74,9 @@
   }
   .chartTitle {
     font-size: 1.6rem;
+  }
+  .chartWrapper {
+    height: 500px; /* Ajustează înălțimea pentru ecrane mai mici */
   }
 }
 
@@ -79,14 +87,20 @@
   .chartTitle {
     font-size: 1.4rem;
   }
+  .chartWrapper {
+    height: 450px; /* Mărește înălțimea pentru ecrane mobile */
+  }
 }
 
 @media (max-width: 576px) {
   .chartContainer {
-    padding: 0.75rem;
+    padding: 1rem;
   }
   .chartTitle {
     font-size: 1.2rem;
+  }
+  .chartWrapper {
+    height: 400px; /* Asigură o înălțime adecvată pe ecrane foarte mici */
   }
 }
 
