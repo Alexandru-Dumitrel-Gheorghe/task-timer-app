@@ -1,4 +1,5 @@
 // src/components/CalendarSection/CalendarSection.jsx
+
 import React from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
@@ -11,7 +12,16 @@ import {
   isSameMonth,
   format,
 } from "date-fns";
-import { FaCalendarAlt, FaClock, FaTools, FaStickyNote } from "react-icons/fa";
+import {
+  FaCalendarAlt,
+  FaClock,
+  FaTools,
+  FaStickyNote,
+  FaChevronLeft,
+  FaChevronRight,
+  FaArrowLeft,
+  FaArrowRight,
+} from "react-icons/fa";
 
 const DAILY_TARGET_HOURS = 8; // 8 Ore pe zi
 const WEEKLY_TARGET_HOURS = 40; // 40 Ore pe săptămână
@@ -129,10 +139,10 @@ const CalendarSection = ({
           value={selectedDate}
           locale={de}
           className={styles.customCalendar}
-          nextLabel="Nächiger Monat"
-          prevLabel="Vorheriger Monat"
-          next2Label="Nächstes Jahr"
-          prev2Label="Vorheriges Jahr"
+          nextLabel={<FaChevronRight />} // Ersetzen von Text durch Icon
+          prevLabel={<FaChevronLeft />} // Ersetzen von Text durch Icon
+          next2Label={<FaArrowRight />} // Ersetzen von Text durch Icon
+          prev2Label={<FaArrowLeft />} // Ersetzen von Text durch Icon
           formatShortWeekday={(locale, date) =>
             formatShortWeekday(locale, date)
           }
