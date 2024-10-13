@@ -10,14 +10,15 @@
   min-height: 100vh;
   background-color: #3b4351;
   padding: 20px;
-  overflow: hidden;
+  overflow-x: hidden; /* Verhindert horizontales Scrollen */
   position: relative;
+  width: 100%;
 }
 
 /* 3D Cube Styling */
 .cube {
-  width: 150px;
-  height: 150px;
+  width: 120px; /* Angepasste Größe für bessere Responsivität */
+  height: 120px;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -29,29 +30,34 @@
 
 .face {
   position: absolute;
-  width: 150px;
-  height: 150px;
+  width: 120px;
+  height: 120px;
   background: rgba(30, 136, 229, 0.2); /* Leicht transparente Farbe */
   border: 2px solid #1e88e5;
 }
 
 .face1 {
-  transform: rotateY(0deg) translateZ(75px);
+  transform: rotateY(0deg) translateZ(60px);
 }
+
 .face2 {
-  transform: rotateY(90deg) translateZ(75px);
+  transform: rotateY(90deg) translateZ(60px);
 }
+
 .face3 {
-  transform: rotateY(180deg) translateZ(75px);
+  transform: rotateY(180deg) translateZ(60px);
 }
+
 .face4 {
-  transform: rotateY(-90deg) translateZ(75px);
+  transform: rotateY(-90deg) translateZ(60px);
 }
+
 .face5 {
-  transform: rotateX(90deg) translateZ(75px);
+  transform: rotateX(90deg) translateZ(60px);
 }
+
 .face6 {
-  transform: rotateX(-90deg) translateZ(75px);
+  transform: rotateX(-90deg) translateZ(60px);
 }
 
 @keyframes rotateCube {
@@ -71,11 +77,11 @@
     255,
     0.85
   ); /* Halbtransparentes Hintergrund */
-  padding: 2.5rem;
+  padding: 2rem;
   border-radius: 10px;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-  max-width: 400px;
-  width: 100%;
+  max-width: 100%;
+  width: 400px; /* Flexibles Anpassen */
   text-align: center;
   position: relative;
   z-index: 1; /* Formular über dem Cube */
@@ -114,6 +120,7 @@ h2 {
   display: flex;
   justify-content: space-around;
   margin: 20px 0;
+  flex-wrap: wrap; /* Zeilenumbruch für kleinere Bildschirme */
 }
 
 .roleOption {
@@ -122,6 +129,7 @@ h2 {
   cursor: pointer;
   color: #333;
   transition: color 0.3s ease;
+  margin-bottom: 10px; /* Abstand für kleine Bildschirme */
 }
 
 .roleOption input {
@@ -237,18 +245,23 @@ p a:hover {
 }
 
 @media (max-width: 480px) {
+  .container {
+    padding: 10px; /* Reduzierte Padding für kleinere Bildschirme */
+  }
+
   .cube {
-    width: 120px;
-    height: 120px;
+    width: 80px; /* Weitere Reduzierung der Größe für kleine Bildschirme */
+    height: 80px;
   }
 
   .face {
-    width: 120px;
-    height: 120px;
+    width: 80px;
+    height: 80px;
+    transform: rotateY(0deg) translateZ(40px); /* Angepasst zur neuen Cube-Größe */
   }
 
   .formWrapper {
-    padding: 2rem;
+    padding: 1.5rem;
     max-width: 300px;
   }
 
