@@ -1,3 +1,8 @@
+/* src/components/Auth/Register.module.css */
+
+@import "../../styles/variables.css";
+
+/* Container für die Register-Seite */
 .container {
   display: flex;
   justify-content: center;
@@ -6,10 +11,66 @@
   background-color: #3b4351;
   padding: 20px;
   overflow: hidden;
+  position: relative;
 }
 
+/* 3D Cube Styling */
+.cube {
+  width: 150px;
+  height: 150px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform-style: preserve-3d;
+  transform: translate(-50%, -50%) rotateX(-30deg) rotateY(-30deg);
+  animation: rotateCube 10s infinite linear;
+  z-index: 0; /* Hintergrund */
+}
+
+.face {
+  position: absolute;
+  width: 150px;
+  height: 150px;
+  background: rgba(30, 136, 229, 0.2); /* Leicht transparente Farbe */
+  border: 2px solid #1e88e5;
+}
+
+.face1 {
+  transform: rotateY(0deg) translateZ(75px);
+}
+.face2 {
+  transform: rotateY(90deg) translateZ(75px);
+}
+.face3 {
+  transform: rotateY(180deg) translateZ(75px);
+}
+.face4 {
+  transform: rotateY(-90deg) translateZ(75px);
+}
+.face5 {
+  transform: rotateX(90deg) translateZ(75px);
+}
+.face6 {
+  transform: rotateX(-90deg) translateZ(75px);
+}
+
+@keyframes rotateCube {
+  from {
+    transform: translate(-50%, -50%) rotateX(-30deg) rotateY(0deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotateX(-30deg) rotateY(360deg);
+  }
+}
+
+/* Formular-Styling */
 .formWrapper {
-  background-color: #ffffff;
+  background-color: rgba(
+    255,
+    255,
+    255,
+    0.85
+  ); /* Halbtransparentes Hintergrund */
   padding: 2.5rem;
   border-radius: 10px;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
@@ -17,6 +78,7 @@
   width: 100%;
   text-align: center;
   position: relative;
+  z-index: 1; /* Formular über dem Cube */
   animation: formEnter 1s ease forwards;
 }
 
@@ -29,30 +91,6 @@
     transform: scale(1);
     opacity: 1;
   }
-}
-
-.switcherWrapper {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 1.5rem;
-}
-
-.switcher {
-  padding: 0.5rem 1rem;
-  cursor: pointer;
-  color: #ccc;
-  border-bottom: 2px solid transparent;
-  transition: all 0.3s ease;
-}
-
-.switcher.isActive {
-  color: #ffffff;
-  border-bottom: 2px solid #ffffff;
-}
-
-.switcher:hover {
-  color: #ffffff;
-  transform: scale(1.1);
 }
 
 h2 {
@@ -69,6 +107,36 @@ h2 {
   100% {
     opacity: 1;
   }
+}
+
+/* Registrierungsoptionen */
+.roleSelection {
+  display: flex;
+  justify-content: space-around;
+  margin: 20px 0;
+}
+
+.roleOption {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  color: #333;
+  transition: color 0.3s ease;
+}
+
+.roleOption input {
+  margin-right: 8px;
+  cursor: pointer;
+}
+
+.roleIcon {
+  margin-right: 5px;
+  font-size: 1.2rem;
+  color: var(--primary-color);
+}
+
+.roleOption:hover {
+  color: var(--primary-color);
 }
 
 input {
@@ -135,4 +203,84 @@ p a {
 p a:hover {
   text-decoration: underline;
   color: #69c43e;
+}
+
+/* Responsive Design */
+
+@media (min-width: 768px) {
+  .container {
+    max-width: 900px; /* Erhöht auf 900px für größere Bildschirme */
+  }
+
+  .cube {
+    width: 200px;
+    height: 200px;
+  }
+
+  .face {
+    width: 200px;
+    height: 200px;
+  }
+
+  .formWrapper {
+    padding: 3rem;
+    max-width: 500px;
+  }
+
+  .roleSelection {
+    margin: 25px 0;
+  }
+
+  .roleIcon {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .cube {
+    width: 120px;
+    height: 120px;
+  }
+
+  .face {
+    width: 120px;
+    height: 120px;
+  }
+
+  .formWrapper {
+    padding: 2rem;
+    max-width: 300px;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  input {
+    font-size: 0.9rem;
+  }
+
+  button {
+    font-size: 0.9rem;
+  }
+
+  .roleIcon {
+    font-size: 1rem;
+  }
+}
+
+/* Dark Mode Support */
+body.dark-mode {
+  --container-bg: #2c2c2c;
+  --text-color: #e0e0e0;
+  --background-color: #3a3a3a;
+  --shadow-color: rgba(0, 0, 0, 0.7);
+  --primary-color: #1e88e5;
+  --primary-hover-bg: #1565c0;
+  --success-color: #43a047;
+  --warning-color: #f1c40f;
+  --danger-color: #e74c3c;
+  --secondary-text: #bdc3c7;
+  --progress-bg: #555555;
+  --transition-speed: 0.3s;
 }
