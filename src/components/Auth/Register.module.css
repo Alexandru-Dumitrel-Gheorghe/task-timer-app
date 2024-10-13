@@ -1,8 +1,5 @@
-/* src/components/Auth/Register.module.css */
-
 @import "../../styles/variables.css";
 
-/* Container für die Register-Seite */
 .container {
   display: flex;
   justify-content: center;
@@ -10,81 +7,27 @@
   min-height: 100vh;
   background-color: #3b4351;
   padding: 20px;
-  overflow-x: hidden; /* Verhindert horizontales Scrollen */
-  position: relative;
+  overflow: hidden;
+}
+
+.tiltWrapper {
   width: 100%;
+  max-width: 400px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-/* 3D Cube Styling */
-.cube {
-  width: 120px; /* Angepasste Größe für bessere Responsivität */
-  height: 120px;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform-style: preserve-3d;
-  transform: translate(-50%, -50%) rotateX(-30deg) rotateY(-30deg);
-  animation: rotateCube 10s infinite linear;
-  z-index: 0; /* Hintergrund */
-}
-
-.face {
-  position: absolute;
-  width: 120px;
-  height: 120px;
-  background: rgba(30, 136, 229, 0.2); /* Leicht transparente Farbe */
-  border: 2px solid #1e88e5;
-}
-
-.face1 {
-  transform: rotateY(0deg) translateZ(60px);
-}
-
-.face2 {
-  transform: rotateY(90deg) translateZ(60px);
-}
-
-.face3 {
-  transform: rotateY(180deg) translateZ(60px);
-}
-
-.face4 {
-  transform: rotateY(-90deg) translateZ(60px);
-}
-
-.face5 {
-  transform: rotateX(90deg) translateZ(60px);
-}
-
-.face6 {
-  transform: rotateX(-90deg) translateZ(60px);
-}
-
-@keyframes rotateCube {
-  from {
-    transform: translate(-50%, -50%) rotateX(-30deg) rotateY(0deg);
-  }
-  to {
-    transform: translate(-50%, -50%) rotateX(-30deg) rotateY(360deg);
-  }
-}
-
-/* Formular-Styling */
 .formWrapper {
-  background-color: rgba(
-    255,
-    255,
-    255,
-    0.85
-  ); /* Halbtransparentes Hintergrund */
-  padding: 2rem;
+  background-color: rgba(255, 255, 255, 0.85); /* Semi-transparent background */
+  padding: 2.5rem;
   border-radius: 10px;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-  max-width: 100%;
-  width: 400px; /* Flexibles Anpassen */
+  max-width: 400px;
+  width: 100%;
   text-align: center;
   position: relative;
-  z-index: 1; /* Formular über dem Cube */
+  z-index: 1;
   animation: formEnter 1s ease forwards;
 }
 
@@ -113,38 +56,6 @@ h2 {
   100% {
     opacity: 1;
   }
-}
-
-/* Registrierungsoptionen */
-.roleSelection {
-  display: flex;
-  justify-content: space-around;
-  margin: 20px 0;
-  flex-wrap: wrap; /* Zeilenumbruch für kleinere Bildschirme */
-}
-
-.roleOption {
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  color: #333;
-  transition: color 0.3s ease;
-  margin-bottom: 10px; /* Abstand für kleine Bildschirme */
-}
-
-.roleOption input {
-  margin-right: 8px;
-  cursor: pointer;
-}
-
-.roleIcon {
-  margin-right: 5px;
-  font-size: 1.2rem;
-  color: var(--primary-color);
-}
-
-.roleOption:hover {
-  color: var(--primary-color);
 }
 
 input {
@@ -216,53 +127,20 @@ p a:hover {
 /* Responsive Design */
 
 @media (min-width: 768px) {
-  .container {
-    max-width: 900px; /* Erhöht auf 900px für größere Bildschirme */
-  }
-
-  .cube {
-    width: 200px;
-    height: 200px;
-  }
-
-  .face {
-    width: 200px;
-    height: 200px;
-  }
-
   .formWrapper {
     padding: 3rem;
     max-width: 500px;
   }
 
-  .roleSelection {
-    margin: 25px 0;
-  }
-
-  .roleIcon {
-    font-size: 1.5rem;
+  .tiltWrapper {
+    max-width: 500px;
   }
 }
 
 @media (max-width: 480px) {
-  .container {
-    padding: 10px; /* Reduzierte Padding für kleinere Bildschirme */
-  }
-
-  .cube {
-    width: 80px; /* Weitere Reduzierung der Größe für kleine Bildschirme */
-    height: 80px;
-  }
-
-  .face {
-    width: 80px;
-    height: 80px;
-    transform: rotateY(0deg) translateZ(40px); /* Angepasst zur neuen Cube-Größe */
-  }
-
   .formWrapper {
     padding: 1.5rem;
-    max-width: 300px;
+    max-width: 320px;
   }
 
   h2 {
@@ -276,24 +154,4 @@ p a:hover {
   button {
     font-size: 0.9rem;
   }
-
-  .roleIcon {
-    font-size: 1rem;
-  }
-}
-
-/* Dark Mode Support */
-body.dark-mode {
-  --container-bg: #2c2c2c;
-  --text-color: #e0e0e0;
-  --background-color: #3a3a3a;
-  --shadow-color: rgba(0, 0, 0, 0.7);
-  --primary-color: #1e88e5;
-  --primary-hover-bg: #1565c0;
-  --success-color: #43a047;
-  --warning-color: #f1c40f;
-  --danger-color: #e74c3c;
-  --secondary-text: #bdc3c7;
-  --progress-bg: #555555;
-  --transition-speed: 0.3s;
 }
