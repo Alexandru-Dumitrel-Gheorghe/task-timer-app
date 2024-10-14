@@ -1,5 +1,3 @@
-// src/components/CategoryList/CategoryList.jsx
-
 import React, { useState, useEffect } from "react";
 import styles from "./CategoryList.module.css";
 import {
@@ -10,7 +8,6 @@ import {
   FaStop,
   FaStickyNote,
 } from "react-icons/fa";
-import NoteModal from "../NoteModal/NoteModal";
 
 const CategoryList = ({
   categories,
@@ -20,11 +17,8 @@ const CategoryList = ({
   handlePause,
   handleStop,
   formatTime,
-  addNote,
 }) => {
   const [activeProduct, setActiveProduct] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [currentProductId, setCurrentProductId] = useState("");
 
   // Load activeProduct from localStorage on mount
   useEffect(() => {
@@ -70,18 +64,8 @@ const CategoryList = ({
   };
 
   const handleStopClick = (category, productId) => {
-    setCurrentProductId(productId);
-    setIsModalOpen(true); // Open the modal when stopping
     handleStop(category, productId);
     setActiveProduct(null);
-  };
-
-  const handleSubmitNote = (note) => {
-    addNote({
-      productId: currentProductId,
-      note,
-    });
-    setIsModalOpen(false); // Close the modal after submission
   };
 
   return (
@@ -129,10 +113,10 @@ const CategoryList = ({
                         <h4 className={styles.productName}>
                           {product.equipment}
                         </h4>
-                        {product.notes && (
+                        {product.notes && product.notes.length > 0 && (
                           <FaStickyNote
                             className={styles.noteIcon}
-                            title={product.notes}
+                            title={product.notes.join(", ")}
                           />
                         )}
                       </div>
@@ -193,13 +177,6 @@ const CategoryList = ({
           </div>
         );
       })}
-
-      {/* Include the NoteModal for adding notes */}
-      <NoteModal
-        isOpen={isModalOpen}
-        onRequestClose={() => setIsModalOpen(false)}
-        onSubmit={handleSubmitNote}
-      />
     </div>
   );
 };

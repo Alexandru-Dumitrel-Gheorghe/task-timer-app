@@ -1,3 +1,4 @@
+// src/components/CalendarSection.jsx
 import React from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
@@ -21,9 +22,9 @@ import {
   FaArrowRight,
 } from "react-icons/fa";
 
-const DAILY_TARGET_HOURS = 8; // 8 Stunden pro Tag
-const WEEKLY_TARGET_HOURS = 40; // 40 Stunden pro Woche
-const MONTHLY_TARGET_HOURS = 160; // 160 Stunden pro Monat
+const DAILY_TARGET_HOURS = 8;
+const WEEKLY_TARGET_HOURS = 40;
+const MONTHLY_TARGET_HOURS = 160;
 
 const CalendarSection = ({
   selectedDate,
@@ -48,7 +49,6 @@ const CalendarSection = ({
     return [...stoppedEvents, ...runningEvents];
   };
 
-  // Get events for the week (starting from Monday)
   const getEventsForWeek = (date) => {
     const startWeek = startOfWeek(date, { weekStartsOn: 1 });
     const stoppedEvents = dailyData.filter((item) =>
@@ -60,7 +60,6 @@ const CalendarSection = ({
     return [...stoppedEvents, ...runningEvents];
   };
 
-  // Get events for the current month
   const getEventsForMonth = (date) => {
     const startMonth = startOfMonth(date);
     const stoppedEvents = dailyData.filter((item) =>
@@ -72,9 +71,7 @@ const CalendarSection = ({
     return [...stoppedEvents, ...runningEvents];
   };
 
-  // Calculate total hours worked for specific data set
   const getTotalHours = (data) => {
-    // Check if elapsedTime is in milliseconds or seconds
     const isMilliseconds = data.some((event) => event.elapsedTime > 100000);
     const conversionFactor = isMilliseconds ? 3600000 : 3600;
 
@@ -87,7 +84,6 @@ const CalendarSection = ({
     return totalHours;
   };
 
-  // Get daily target percentage for the selected date
   const getDailyPercentage = () => {
     const eventsForDay = getEventsForDate(selectedDate);
     const totalHours = getTotalHours(eventsForDay);
@@ -95,7 +91,6 @@ const CalendarSection = ({
     return percentage;
   };
 
-  // Get weekly target percentage for the selected week
   const getWeeklyPercentage = () => {
     const eventsForWeek = getEventsForWeek(selectedDate);
     const totalHours = getTotalHours(eventsForWeek);
@@ -103,7 +98,6 @@ const CalendarSection = ({
     return percentage;
   };
 
-  // Get monthly target percentage for the selected month
   const getMonthlyPercentage = () => {
     const eventsForMonth = getEventsForMonth(selectedDate);
     const totalHours = getTotalHours(eventsForMonth);
@@ -111,7 +105,6 @@ const CalendarSection = ({
     return percentage;
   };
 
-  // Custom function to format short weekday names in German
   const formatShortWeekday = (locale, date) => {
     return format(date, "EEE", { locale });
   };
@@ -138,7 +131,6 @@ const CalendarSection = ({
         />
       </div>
 
-      {/* Display Usage Overview First */}
       <div className={styles.usageOverview}>
         <h3>
           <FaClock className={styles.usageIcon} />
@@ -178,7 +170,6 @@ const CalendarSection = ({
         </div>
       </div>
 
-      {/* Arbeitszeiten Section */}
       <div className={styles.eventList}>
         <h3>
           <FaClock className={styles.eventIcon} />

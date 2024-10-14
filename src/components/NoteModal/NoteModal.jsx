@@ -10,7 +10,6 @@ const NoteModal = ({ isOpen, onRequestClose, onSubmit }) => {
     if (note.trim()) {
       onSubmit(note);
       setNote(""); // Reset the note field
-      onRequestClose(); // Close the modal
     }
   };
 
@@ -32,7 +31,7 @@ const NoteModal = ({ isOpen, onRequestClose, onSubmit }) => {
         />
         <div className={styles.buttonGroup}>
           <button type="submit" className={styles.submitButton}>
-            Notizen Hinzufügen
+            Notiz Hinzufügen
           </button>
           <button
             type="button"
