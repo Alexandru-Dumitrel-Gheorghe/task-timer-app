@@ -1,0 +1,61 @@
+/* src/components/ScrollToTop.module.css */
+
+.scrollToTop {
+  position: fixed;
+  bottom: 40px;
+  right: 40px;
+  width: 50px;
+  height: 50px;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  transition: opacity 0.4s, transform 0.3s;
+  opacity: 0.7;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.scrollToTop:hover {
+  opacity: 1;
+  transform: translateY(-5px);
+}
+
+.scrollToTop:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--secondary-color);
+}
+
+/* Pulsierender Effekt beim Hover */
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+}
+
+.scrollToTop:hover {
+  animation: pulse 1s infinite;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .scrollToTop {
+    width: 40px;
+    height: 40px;
+    bottom: 20px;
+    right: 20px;
+  }
+}

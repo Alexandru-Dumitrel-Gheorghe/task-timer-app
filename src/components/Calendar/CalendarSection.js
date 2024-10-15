@@ -9,6 +9,7 @@ import {
   startOfMonth,
   isSameWeek,
   isSameMonth,
+  isSameDay, // Importă isSameDay
   format,
 } from "date-fns";
 import {
@@ -34,26 +35,35 @@ const CalendarSection = ({
   setSelectedDate,
   dailyData,
   runningData,
-  deleteEvent, // Funktion zum Löschen eines Ereignisses
-  updateEvent, // Funktion zum Aktualisieren eines Ereignisses
+  deleteEvent, // Funcție pentru ștergerea unui eveniment
+  updateEvent, // Funcție pentru actualizarea unui eveniment
 }) => {
-  // Datum im Format YYYY-MM-DD formatieren
-  const formatDate = (date) => format(date, "yyyy-MM-dd");
-
-  // Ereignisse für das ausgewählte Datum abrufen
+  // Obținem evenimentele pentru data selectată folosind isSameDay
   const getEventsForDate = (date) => {
-    const formattedDate = formatDate(date);
-    const stoppedEvents = dailyData.filter((item) =>
-      item.date.startsWith(formattedDate)
-    );
-    const runningEvents = runningData.filter(
-      (item) =>
-        new Date(item.date).toLocaleDateString("de-DE") ===
-        date.toLocaleDateString("de-DE")
-    );
+    const stoppedEvents = dailyData.filter((item) => {
+      const eventDate = new Date(item.date);
+      const sameDay = isSameDay(eventDate, date);
+      if (sameDay) {
+        console.log(
+          `Stopped Event Matched: ${item.date} with Selected Date: ${date}`
+        );
+      }
+      return sameDay;
+    });
+    const runningEvents = runningData.filter((item) => {
+      const eventDate = new Date(item.date);
+      const sameDay = isSameDay(eventDate, date);
+      if (sameDay) {
+        console.log(
+          `Running Event Matched: ${item.date} with Selected Date: ${date}`
+        );
+      }
+      return sameDay;
+    });
     return [...stoppedEvents, ...runningEvents];
   };
 
+  // Obținem evenimentele pentru săptămâna selectată
   const getEventsForWeek = (date) => {
     const startWeek = startOfWeek(date, { weekStartsOn: 1 });
     const stoppedEvents = dailyData.filter((item) =>
@@ -65,6 +75,7 @@ const CalendarSection = ({
     return [...stoppedEvents, ...runningEvents];
   };
 
+  // Obținem evenimentele pentru luna selectată
   const getEventsForMonth = (date) => {
     const startMonth = startOfMonth(date);
     const stoppedEvents = dailyData.filter((item) =>
@@ -76,6 +87,7 @@ const CalendarSection = ({
     return [...stoppedEvents, ...runningEvents];
   };
 
+  // Calculăm totalul orelor
   const getTotalHours = (data) => {
     const isMilliseconds = data.some((event) => event.elapsedTime > 100000);
     const conversionFactor = isMilliseconds ? 3600000 : 3600;
@@ -89,6 +101,7 @@ const CalendarSection = ({
     return totalHours;
   };
 
+  // Calculăm procentul de îndeplinire zilnică
   const getDailyPercentage = () => {
     const eventsForDay = getEventsForDate(selectedDate);
     const totalHours = getTotalHours(eventsForDay);
@@ -96,6 +109,7 @@ const CalendarSection = ({
     return percentage;
   };
 
+  // Calculăm procentul de îndeplinire săptămânală
   const getWeeklyPercentage = () => {
     const eventsForWeek = getEventsForWeek(selectedDate);
     const totalHours = getTotalHours(eventsForWeek);
@@ -103,6 +117,7 @@ const CalendarSection = ({
     return percentage;
   };
 
+  // Calculăm procentul de îndeplinire lunară
   const getMonthlyPercentage = () => {
     const eventsForMonth = getEventsForMonth(selectedDate);
     const totalHours = getTotalHours(eventsForMonth);
@@ -110,6 +125,7 @@ const CalendarSection = ({
     return percentage;
   };
 
+  // Formatează denumirea scurtă a zilei săptămânii
   const formatShortWeekday = (locale, date) => {
     return format(date, "EEE", { locale });
   };
@@ -183,7 +199,7 @@ const CalendarSection = ({
         {getEventsForDate(selectedDate).length > 0 ? (
           getEventsForDate(selectedDate).map((event) => (
             <EventCard
-              key={event.id} // Verwenden Sie 'id' als eindeutigen Schlüssel
+              key={event.id} // Utilizează 'id' ca cheie unică
               event={event}
               deleteEvent={deleteEvent}
               updateEvent={updateEvent}
@@ -199,34 +215,34 @@ const CalendarSection = ({
   );
 };
 
-// Komponente für jede Ereigniskarte
+// Componentă pentru fiecare card de eveniment
 const EventCard = ({ event, deleteEvent, updateEvent }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedNotes, setEditedNotes] = useState("");
 
   const handleDelete = () => {
-    // Funktion zum Löschen des Ereignisses mit 'id'
+    // Funcție pentru ștergerea evenimentului folosind 'id'
     deleteEvent(event.id);
   };
 
   const handleEditToggle = () => {
     setIsEditing(!isEditing);
     if (!isEditing) {
-      setEditedNotes(""); // Eingabefeld zurücksetzen, wenn der Bearbeitungsmodus aktiviert wird
+      setEditedNotes(""); // Resetează câmpul de input când modul de editare este activat
     }
   };
 
   const handleSave = () => {
     const newNote = editedNotes.trim();
     if (newNote === "") {
-      // Optional: Leere Notizen nicht speichern
+      // Opțional: Nu salva notele goale
       return;
     }
-    // Sicherstellen, dass `event.notes` ein Array ist, bevor eine neue Notiz hinzugefügt wird
+    // Asigură-te că `event.notes` este un array înainte de a adăuga o nouă notă
     const updatedNotes = Array.isArray(event.notes)
       ? [...event.notes, newNote]
       : [newNote];
-    // Funktion zum Aktualisieren des Ereignisses mit 'id' und den neuen Notizen aufrufen
+    // Apelează funcția de actualizare a evenimentului cu 'id' și noile note
     updateEvent(event.id, { notes: updatedNotes });
     setIsEditing(false);
   };
@@ -300,7 +316,7 @@ const EventCard = ({ event, deleteEvent, updateEvent }) => {
   );
 };
 
-// Hilfsfunktion zur Formatierung der Zeit von Sekunden oder Millisekunden zu HH:MM:SS
+// Funcție auxiliară pentru formatarea timpului din secunde sau milisecunde în HH:MM:SS
 const formatTime = (time) => {
   const isMilliseconds = time > 100000;
   const totalSeconds = isMilliseconds ? Math.floor(time / 1000) : time;

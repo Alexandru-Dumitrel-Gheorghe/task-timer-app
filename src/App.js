@@ -1,3 +1,4 @@
+// src/App.js
 import React, { useContext } from "react";
 import {
   BrowserRouter as Router,
@@ -10,7 +11,8 @@ import Login from "./components/Auth/Login";
 import Register from "./components/Auth/Register";
 import ProductList from "./components/ProductList";
 import { AuthProvider, AuthContext } from "./context/AuthContext";
-import { SnackbarProvider } from "notistack"; // Importăm SnackbarProvider
+import { SnackbarProvider } from "notistack"; // Importieren von SnackbarProvider
+import ScrollToTop from "./components/ScrollToTop/ScrollToTop"; // Importieren der ScrollToTop-Komponente
 
 const PrivateRoute = ({ children }) => {
   const { isAuthenticated } = useContext(AuthContext);
@@ -22,6 +24,7 @@ function App() {
     <Router>
       <AuthProvider>
         <SnackbarProvider maxSnack={3} autoHideDuration={3000}>
+          <ScrollToTop /> {/* Einbinden der ScrollToTop-Komponente */}
           <Routes>
             <Route path="/" element={<Navigate to="/login" />} />
             <Route path="/login" element={<Login />} />

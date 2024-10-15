@@ -1,0 +1,122 @@
+/* src/components/Calendar/EventCard.module.css */
+.eventItem {
+  background: var(--container-bg);
+  padding: 1.5rem;
+  margin: 1rem 0;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease,
+    background-color 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.eventItem:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.eventHeader {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  position: relative;
+}
+
+.eventHeader strong {
+  font-size: 1.2rem;
+  color: var(--text-color);
+}
+
+.eventIcon {
+  margin-right: 0.5rem;
+  color: var(--primary-color);
+  font-size: 1.5rem;
+}
+
+.detailIcon {
+  margin-right: 0.5rem;
+  color: var(--secondary-text);
+  font-size: 1rem;
+  vertical-align: middle;
+}
+
+/* Styles für Notizen innerhalb der Ereigniskarte */
+.notesSection {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+
+.notesInput {
+  width: 60%;
+  padding: 8px 12px;
+  margin-right: 10px;
+  border: 1px solid var(--secondary-text);
+  border-radius: 6px;
+  font-size: 1rem;
+  color: var(--text-color);
+  background-color: var(--background-color);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.notesInput:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 5px var(--primary-color);
+}
+
+.saveButton,
+.cancelButton,
+.editButton,
+.deleteButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  margin-left: 5px;
+  font-size: 1rem;
+  transition: color 0.3s ease;
+}
+
+.saveButton {
+  color: #28a745; /* Grün */
+}
+
+.saveButton:hover {
+  color: #218838;
+}
+
+.cancelButton {
+  color: #6c757d; /* Grau */
+}
+
+.cancelButton:hover {
+  color: #5a6268;
+}
+
+.editButton {
+  color: #007bff; /* Blau */
+}
+
+.editButton:hover {
+  color: #0056b3;
+}
+
+.deleteButton {
+  color: #dc3545; /* Rot */
+}
+
+.deleteButton:hover {
+  color: #c82333;
+}
+
+.notesSection .saveButton,
+.notesSection .cancelButton,
+.notesSection .editButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

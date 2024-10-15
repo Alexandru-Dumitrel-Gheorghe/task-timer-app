@@ -80,24 +80,47 @@
   ); /* Definieren Sie eine Hover-Farbe in variables.css */
 }
 
-/* Suchbutton-Styling */
-.searchButton {
-  position: absolute;
-  right: 15px;
-  background: none;
-  border: none;
-  color: var(--primary-color);
-  cursor: pointer;
-  font-size: 1.2em;
-  padding: 8px;
-  transition: color 0.3s ease, transform 0.2s ease;
+/* Kategoriencontainer-Styling */
+.categoryContainer {
+  display: flex;
+  align-items: center;
+  flex: 1 1 200px;
+  max-width: 300px;
+  width: 100%;
 }
 
-.searchButton:hover {
-  color: var(
-    --primary-hover-color
-  ); /* Definieren Sie eine Hover-Farbe in variables.css */
-  transform: scale(1.1);
+.categoryLabel {
+  margin-right: 10px;
+  font-size: var(--font-size-medium);
+  color: var(--text-color);
+}
+
+.categorySelect {
+  width: 100%;
+  padding: 10px 12px;
+  border: 2px solid transparent;
+  border-radius: var(--border-radius);
+  font-size: var(--font-size-medium);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  background: var(--input-bg);
+  color: var(--text-color);
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23777' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M4.646 6.646a.5.5 0 0 1 .708 0L8 9.293l2.646-2.647a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 16px 16px;
+}
+
+/* Fokuszustand für das Kategorien-Dropdown */
+.categorySelect:focus {
+  border-color: var(--primary-color);
+  outline: none;
+  box-shadow: 0 0 10px rgba(30, 136, 229, 0.5);
+}
+
+/* Hover-Effekt für das Dropdown */
+.categorySelect:hover {
+  border-color: var(--secondary-text);
 }
 
 /* Responsives Design */
@@ -113,6 +136,11 @@
     flex: 1 1 100%;
     max-width: 100%;
   }
+
+  .categoryContainer {
+    flex: 1 1 100%;
+    max-width: 100%;
+  }
 }
 
 @media (max-width: 768px) {
@@ -121,6 +149,14 @@
   }
 
   .searchBar {
+    font-size: var(--font-size-small);
+  }
+
+  .categoryLabel {
+    font-size: var(--font-size-small);
+  }
+
+  .categorySelect {
     font-size: var(--font-size-small);
   }
 }
@@ -135,7 +171,11 @@
     font-size: var(--font-size-small);
   }
 
-  .searchButton {
-    font-size: 1em;
+  .categoryLabel {
+    font-size: var(--font-size-small);
+  }
+
+  .categorySelect {
+    font-size: var(--font-size-small);
   }
 }
