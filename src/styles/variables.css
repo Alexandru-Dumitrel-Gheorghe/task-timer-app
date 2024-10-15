@@ -2,31 +2,40 @@
 
 :root {
   --container-bg: #ffffff;
-  --background-color: #f9f9f9;
   --text-color: #333333;
-  --secondary-text: #777777;
-  --primary-color: #1e88e5;
-  --primary-color-hover: #1565c0;
-  --accent-color: #ffcd02;
+  --background-color: #fafafa;
   --shadow-color: rgba(0, 0, 0, 0.1);
-  --border-radius: 12px;
+  --primary-color: hsla(170, 50%, 45%, 1); /* Culoarea specificată */
+  --primary-color-hover: hsla(
+    170,
+    50%,
+    35%,
+    1
+  ); /* Culoare mai închisă pentru hover */
+  --accent-color: #ffcd02;
+  --success-color: #27ae60;
+  --progress-bg: #e0e0e0;
+  --progress-fill-color: var(--primary-color);
+  --border-radius: 15px;
   --transition-speed: 0.3s;
-  --button-bg: transparent;
-  --secondary-color: #ff9800;
-  --progress-bg: #555555;
-  --success-color: #43a047;
-  --light-blue: #1e88e5;
+  --danger-hover: #bd2130; /* Adăugat pentru logoutButton */
+  --muted-text: #777777; /* Adăugat pentru logoutText */
+  --light-blue: #f0f8ff; /* Adăugat pentru notificationItem:hover */
 }
 
-/* Suport pentru Modul Întunecat */
+/* Dark Mode Variables */
 body.dark-mode {
   --container-bg: #2c2c2c;
   --text-color: #e0e0e0;
   --background-color: #3a3a3a;
   --shadow-color: rgba(0, 0, 0, 0.7);
-  --primary-color: #1e88e5;
-  --primary-color-hover: #1565c0;
-  --secondary-color: #ff9800;
-  --secondary-text: #b0b0b0;
+  --primary-color: hsla(170, 50%, 35%, 1); /* Ajustată pentru Dark Mode */
+  --primary-color-hover: hsla(170, 50%, 25%, 1);
   --accent-color: #ffcd02;
+  --success-color: #27ae60;
+  --progress-bg: #555555;
+  --progress-fill-color: var(--primary-color);
+  --danger-hover: #c82333; /* Ajustată pentru Dark Mode */
+  --muted-text: #cccccc; /* Ajustată pentru Dark Mode */
+  --light-blue: rgba(0, 0, 0, 0.05); /* Ajustată pentru Dark Mode */
 }
