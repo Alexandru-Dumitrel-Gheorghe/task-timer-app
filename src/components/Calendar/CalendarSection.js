@@ -1,5 +1,5 @@
-// src/components/CalendarSection.jsx
-import React from "react";
+// src/components/Calendar/CalendarSection.jsx
+import React, { useState } from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import styles from "./CalendarSection.module.css";
@@ -20,6 +20,9 @@ import {
   FaChevronRight,
   FaArrowLeft,
   FaArrowRight,
+  FaTrash,
+  FaEdit,
+  FaSave,
 } from "react-icons/fa";
 
 const DAILY_TARGET_HOURS = 8;
@@ -31,11 +34,13 @@ const CalendarSection = ({
   setSelectedDate,
   dailyData,
   runningData,
+  deleteEvent, // Funktion zum Löschen eines Ereignisses
+  updateEvent, // Funktion zum Aktualisieren eines Ereignisses
 }) => {
-  // Format date to YYYY-MM-DD
+  // Datum im Format YYYY-MM-DD formatieren
   const formatDate = (date) => format(date, "yyyy-MM-dd");
 
-  // Get events for the selected date
+  // Ereignisse für das ausgewählte Datum abrufen
   const getEventsForDate = (date) => {
     const formattedDate = formatDate(date);
     const stoppedEvents = dailyData.filter((item) =>
@@ -113,7 +118,7 @@ const CalendarSection = ({
     <div className={styles.calendarContainer}>
       <div className={styles.header}>
         <FaCalendarAlt className={styles.headerIcon} />
-        <h2>Arbeitszeit-Übersicht</h2>
+        <h2>Arbeitszeitübersicht</h2>
       </div>
       <div className={styles.calendarWrapper}>
         <Calendar
@@ -177,33 +182,12 @@ const CalendarSection = ({
         </h3>
         {getEventsForDate(selectedDate).length > 0 ? (
           getEventsForDate(selectedDate).map((event) => (
-            <div
-              key={`${event.productId}-${event.date}`}
-              className={styles.eventItem}
-            >
-              <div className={styles.eventHeader}>
-                <FaTools className={styles.eventIcon} />
-                <strong>{event.productName}</strong>
-              </div>
-              <p>
-                <FaClock className={styles.detailIcon} /> Arbeitszeit:{" "}
-                {formatTime(event.elapsedTime)} Stunden
-              </p>
-              <p>
-                <FaTools className={styles.detailIcon} /> Kategorie:{" "}
-                {event.category}
-              </p>
-              {event.notes && (
-                <p>
-                  <FaStickyNote className={styles.detailIcon} /> Notizen:{" "}
-                  {event.notes}
-                </p>
-              )}
-              <p>
-                <FaCalendarAlt className={styles.detailIcon} /> Datum:{" "}
-                {new Date(event.date).toLocaleString("de-DE")}
-              </p>
-            </div>
+            <EventCard
+              key={event.id} // Verwenden Sie 'id' als eindeutigen Schlüssel
+              event={event}
+              deleteEvent={deleteEvent}
+              updateEvent={updateEvent}
+            />
           ))
         ) : (
           <p className={styles.noEvents}>
@@ -215,7 +199,108 @@ const CalendarSection = ({
   );
 };
 
-// Helper function to format time from seconds or milliseconds to HH:MM:SS
+// Komponente für jede Ereigniskarte
+const EventCard = ({ event, deleteEvent, updateEvent }) => {
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedNotes, setEditedNotes] = useState("");
+
+  const handleDelete = () => {
+    // Funktion zum Löschen des Ereignisses mit 'id'
+    deleteEvent(event.id);
+  };
+
+  const handleEditToggle = () => {
+    setIsEditing(!isEditing);
+    if (!isEditing) {
+      setEditedNotes(""); // Eingabefeld zurücksetzen, wenn der Bearbeitungsmodus aktiviert wird
+    }
+  };
+
+  const handleSave = () => {
+    const newNote = editedNotes.trim();
+    if (newNote === "") {
+      // Optional: Leere Notizen nicht speichern
+      return;
+    }
+    // Sicherstellen, dass `event.notes` ein Array ist, bevor eine neue Notiz hinzugefügt wird
+    const updatedNotes = Array.isArray(event.notes)
+      ? [...event.notes, newNote]
+      : [newNote];
+    // Funktion zum Aktualisieren des Ereignisses mit 'id' und den neuen Notizen aufrufen
+    updateEvent(event.id, { notes: updatedNotes });
+    setIsEditing(false);
+  };
+
+  return (
+    <div className={styles.eventItem}>
+      <div className={styles.eventHeader}>
+        <FaTools className={styles.eventIcon} />
+        <strong>{event.productName}</strong>
+        <button
+          className={styles.deleteButton}
+          onClick={handleDelete}
+          title="Ereignis löschen"
+        >
+          <FaTrash />
+        </button>
+      </div>
+      <p>
+        <FaClock className={styles.detailIcon} /> Arbeitszeit:{" "}
+        {formatTime(event.elapsedTime)} Stunden
+      </p>
+      <p>
+        <FaTools className={styles.detailIcon} /> Kategorie: {event.category}
+      </p>
+      <p>
+        <FaCalendarAlt className={styles.detailIcon} /> Datum:{" "}
+        {new Date(event.date).toLocaleString("de-DE")}
+      </p>
+      <div className={styles.notesSection}>
+        <FaStickyNote className={styles.detailIcon} /> Notizen:{" "}
+        {isEditing ? (
+          <>
+            <input
+              type="text"
+              value={editedNotes}
+              onChange={(e) => setEditedNotes(e.target.value)}
+              className={styles.notesInput}
+              placeholder="Notiz hinzufügen"
+            />
+            <button
+              className={styles.saveButton}
+              onClick={handleSave}
+              title="Notizen speichern"
+            >
+              <FaSave />
+            </button>
+            <button
+              className={styles.cancelButton}
+              onClick={handleEditToggle}
+              title="Bearbeitung abbrechen"
+            >
+              <FaEdit />
+            </button>
+          </>
+        ) : (
+          <>
+            {Array.isArray(event.notes) && event.notes.length > 0
+              ? event.notes.join(", ")
+              : "Keine Notiz"}
+            <button
+              className={styles.editButton}
+              onClick={handleEditToggle}
+              title="Notizen bearbeiten"
+            >
+              <FaEdit />
+            </button>
+          </>
+        )}
+      </div>
+    </div>
+  );
+};
+
+// Hilfsfunktion zur Formatierung der Zeit von Sekunden oder Millisekunden zu HH:MM:SS
 const formatTime = (time) => {
   const isMilliseconds = time > 100000;
   const totalSeconds = isMilliseconds ? Math.floor(time / 1000) : time;

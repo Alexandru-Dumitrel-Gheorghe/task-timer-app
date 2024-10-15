@@ -1,3 +1,4 @@
+// src/components/CategoryList.jsx
 import React, { useState, useEffect } from "react";
 import styles from "./CategoryList.module.css";
 import {
@@ -8,6 +9,7 @@ import {
   FaStop,
   FaStickyNote,
 } from "react-icons/fa";
+import PropTypes from "prop-types";
 
 const CategoryList = ({
   categories,
@@ -20,7 +22,7 @@ const CategoryList = ({
 }) => {
   const [activeProduct, setActiveProduct] = useState(null);
 
-  // Load activeProduct from localStorage on mount
+  // Load activeProduct from server or state if needed (Optional)
   useEffect(() => {
     const storedActiveProduct = localStorage.getItem("activeProduct");
     if (storedActiveProduct) {
@@ -44,7 +46,7 @@ const CategoryList = ({
     }
   }, [categories]);
 
-  // Save activeProduct to localStorage when it changes
+  // Save activeProduct to localStorage when it changes (Optional)
   useEffect(() => {
     if (activeProduct) {
       localStorage.setItem("activeProduct", JSON.stringify(activeProduct));
@@ -179,6 +181,16 @@ const CategoryList = ({
       })}
     </div>
   );
+};
+
+CategoryList.propTypes = {
+  categories: PropTypes.array.isRequired,
+  expandedCategory: PropTypes.string,
+  handleToggleCategory: PropTypes.func.isRequired,
+  handleStart: PropTypes.func.isRequired,
+  handlePause: PropTypes.func.isRequired,
+  handleStop: PropTypes.func.isRequired,
+  formatTime: PropTypes.func.isRequired,
 };
 
 export default CategoryList;
