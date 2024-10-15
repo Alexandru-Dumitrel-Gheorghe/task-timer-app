@@ -1,3 +1,5 @@
+/* src/styles/app.css */
+
 /* Reset CSS */
 * {
   margin: 0;
@@ -34,10 +36,12 @@ textarea {
 }
 
 body {
-  font-family: "Arial", sans-serif;
+  font-family: "Roboto", sans-serif;
   color: var(--text-color);
-  background-color: #f5f5f5;
+  background-color: var(--background-color);
   line-height: 1.6;
+  transition: background-color var(--transition-speed) ease,
+    color var(--transition-speed) ease;
 }
 
 a {
@@ -47,7 +51,7 @@ a {
 }
 
 a:hover {
-  color: var(--primary-hover);
+  color: var(--primary-color-hover);
 }
 
 button {
@@ -90,7 +94,7 @@ button:focus {
 }
 
 .logo h2 {
-  font-size: var(--font-size-large);
+  font-size: var(--font-size-large, 2rem);
   font-weight: 700;
   margin: 0;
   letter-spacing: 1px;
@@ -200,15 +204,15 @@ button:focus {
 }
 
 .logoutButton:hover {
-  color: var(--danger-hover);
-  background-color: rgba(255, 77, 79, 0.2);
+  color: var(--danger-hover, #dc3545);
+  background-color: rgba(220, 53, 69, 0.2);
   transform: scale(1.05);
 }
 
 .logoutText {
   margin-left: 5px;
   font-size: 1em;
-  color: var(--muted-text);
+  color: var(--muted-text, #c0c0c0);
   transition: color var(--transition-speed);
 }
 
@@ -216,21 +220,60 @@ button:focus {
   color: var(--text-color);
 }
 
-/* Responsivitate */
-@media (max-width: 768px) {
-  .header {
-    padding: 10px 15px;
-  }
+/* Custom Scrollbar Styles */
 
-  .logo h2 {
-    font-size: var(--font-size-medium);
-  }
+/* Scrollbar pentru browserele WebKit (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+  width: 12px; /* Lățimea verticală a scrollbar-ului */
+  height: 12px; /* Înălțimea orizontală a scrollbar-ului */
+}
 
-  .iconButton {
-    font-size: 1.3em;
-  }
+::-webkit-scrollbar-track {
+  background: var(--background-color); /* Culoarea fundalului track-ului */
+  border-radius: var(--border-radius); /* Colțuri rotunjite */
+}
 
-  .logoutText {
-    display: none;
-  }
+::-webkit-scrollbar-thumb {
+  background-color: var(--primary-color); /* Culoarea thumb-ului */
+  border-radius: var(--border-radius); /* Colțuri rotunjite */
+  border: 3px solid var(--background-color); /* Spațiu între thumb și track */
+  background-clip: padding-box; /* Asigură că border-ul este vizibil */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(
+    --primary-color-hover
+  ); /* Culoarea thumb-ului la hover */
+}
+
+/* Scrollbar pentru Firefox */
+body {
+  scrollbar-width: thin; /* Dimensiunea scrollbar-ului */
+  scrollbar-color: var(--primary-color) var(--background-color); /* Culoarea thumb-ului și a track-ului */
+}
+
+/* Scrollbar pentru elemente specifice, dacă este necesar */
+/* Exemplu: Personalizarea scrollbar-ului pentru .notificationDropdown */
+.notificationDropdown {
+  scrollbar-width: thin;
+  scrollbar-color: var(--primary-color) var(--background-color);
+}
+
+.notificationDropdown::-webkit-scrollbar {
+  width: 10px;
+}
+
+.notificationDropdown::-webkit-scrollbar-track {
+  background: var(--background-color);
+  border-radius: 8px;
+}
+
+.notificationDropdown::-webkit-scrollbar-thumb {
+  background-color: var(--primary-color);
+  border-radius: 8px;
+  border: 2px solid var(--background-color);
+}
+
+.notificationDropdown::-webkit-scrollbar-thumb:hover {
+  background-color: var(--primary-color-hover);
 }
