@@ -29,7 +29,7 @@ Make sure you have [Node.js](https://nodejs.org/) installed on your system.
 
 1. **Clone the Repository**
    ```bash
-   git clone [https://github.com/yourusername/task-timer-app.git](https://github.com/Alexandru-Dumitrel-Gheorghe/task-timer-app)
+   git clone (https://github.com/Alexandru-Dumitrel-Gheorghe/task-timer-app)
    cd task-timer-app
    ```
 2. **Install Dependencies**
